@@ -3,6 +3,8 @@ package GUI;
 import java.awt.EventQueue;
 
 import javax.swing.JInternalFrame;
+import javax.swing.JOptionPane;
+
 import java.awt.BorderLayout;
 import javax.swing.JButton;
 import javax.swing.JScrollPane;
@@ -92,13 +94,56 @@ public class GUITablaProductos extends JInternalFrame implements ActionListener 
 			do_btnNewButton_actionPerformed(e);
 		}
 	}
+	//Buscar
+	private Producto buscarProductoPorCodigo(String codigo) {
+	    for (Producto p : controlador.listarProductos()) {
+	        if (p.getCodigo().equalsIgnoreCase(codigo)) {
+	            return p;
+	        }
+	    }
+	    return null;
+	}
 	//Editar
 	protected void do_btnNewButton_actionPerformed(ActionEvent e) {
-		
+		int filaSeleccionada = table.getSelectedRow();
+	    if (filaSeleccionada != -1) {
+	        String codigo = table.getValueAt(filaSeleccionada, 0).toString();
+	        Producto producto = buscarProductoPorCodigo(codigo);
+	        if (producto != null) {
+	            String nuevoNombre = JOptionPane.showInputDialog(this, "Nuevo nombre:", producto.getNombre());
+	            String nuevoPrecioStr = JOptionPane.showInputDialog(this, "Nuevo precio:", producto.getPrecio());
+
+	            try {
+	                double nuevoPrecio = Double.parseDouble(nuevoPrecioStr);
+	                producto.setNombre(nuevoNombre);
+	                producto.setPrecio(nuevoPrecio);
+	                JOptionPane.showMessageDialog(this, "Producto actualizado.");
+	                cargarDatosEnTabla();
+	            } catch (NumberFormatException ex) {
+	                JOptionPane.showMessageDialog(this, "Precio inválido.");
+	            }
+	        }
+	    } else {
+	        JOptionPane.showMessageDialog(this, "Seleccione un producto para editar.");
+	    }
 	}
 	//Eliminar
 	protected void do_btnNewButton_1_actionPerformed(ActionEvent e) {
-		
+		int filaSeleccionada = table.getSelectedRow();
+	    if (filaSeleccionada != -1) {
+	        String codigo = table.getValueAt(filaSeleccionada, 0).toString();
+	        Producto producto = buscarProductoPorCodigo(codigo);
+	        if (producto != null) {
+	            int confirmacion = JOptionPane.showConfirmDialog(this, "¿Está seguro de eliminar el producto?", "Confirmar", JOptionPane.YES_NO_OPTION);
+	            if (confirmacion == JOptionPane.YES_OPTION) {
+	                controlador.eliminarProducto(producto);
+	                JOptionPane.showMessageDialog(this, "Producto eliminado.");
+	                cargarDatosEnTabla();
+	            }
+	        }
+	    } else {
+	        JOptionPane.showMessageDialog(this, "Seleccione un producto para eliminar.");
+	    }
 	}
 	//Actualizar
 	protected void do_btnNewButton_2_actionPerformed(ActionEvent e) {
