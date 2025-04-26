@@ -7,8 +7,14 @@ import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.GridLayout;
 import javax.swing.JTextField;
+
+import Modelo.Producto;
+import controlador.ProductoControlador;
+
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 import java.awt.Font;
@@ -16,18 +22,19 @@ import java.awt.Font;
 public class GUIFormulario extends JInternalFrame implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
+	private ProductoControlador controlador;
 	private JButton btnSalir;
 	private JLabel lblNewLabel;
 	private JLabel lblNewLabel_3;
 	private JLabel lblNewLabel_5;
 	private JLabel lblNewLabel_6;
 	private JLabel lblNewLabel_7;
-	private JTextField textField;
-	private JTextField textField_1;
-	private JTextField textField_3;
-	private JTextField textField_4;
-	private JComboBox comboBox;
-	private JButton btnNewButton;
+	private JTextField txtCodigo;
+	private JTextField txtNombre;
+	private JTextField txtPrecio;
+	private JTextField txtStock;
+	private JComboBox cmbTipo;
+	private JButton btnGuardar;
 
 	/**
 	 * Launch the application.
@@ -36,7 +43,8 @@ public class GUIFormulario extends JInternalFrame implements ActionListener {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					GUIFormulario frame = new GUIFormulario();
+					ProductoControlador controlador = new ProductoControlador();
+					GUIFormulario frame = new GUIFormulario(controlador);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -48,7 +56,9 @@ public class GUIFormulario extends JInternalFrame implements ActionListener {
 	/**
 	 * Create the frame.
 	 */
-	public GUIFormulario() {
+	
+	public GUIFormulario(ProductoControlador controlador) {
+		this.controlador = controlador;
 		setTitle("Abierto");
 		setBounds(100, 100, 539, 342);
 		{
@@ -59,10 +69,10 @@ public class GUIFormulario extends JInternalFrame implements ActionListener {
 				getContentPane().add(lblNewLabel);
 			}
 			{
-				textField = new JTextField();
-				textField.setFont(new Font("Tahoma", Font.PLAIN, 14));
-				getContentPane().add(textField);
-				textField.setColumns(10);
+				txtCodigo = new JTextField();
+				txtCodigo.setFont(new Font("Tahoma", Font.PLAIN, 14));
+				getContentPane().add(txtCodigo);
+				txtCodigo.setColumns(10);
 			}
 			{
 				lblNewLabel_3 = new JLabel("Nombre del producto:");
@@ -70,10 +80,10 @@ public class GUIFormulario extends JInternalFrame implements ActionListener {
 				getContentPane().add(lblNewLabel_3);
 			}
 			{
-				textField_1 = new JTextField();
-				textField_1.setFont(new Font("Tahoma", Font.PLAIN, 14));
-				getContentPane().add(textField_1);
-				textField_1.setColumns(10);
+				txtNombre = new JTextField();
+				txtNombre.setFont(new Font("Tahoma", Font.PLAIN, 14));
+				getContentPane().add(txtNombre);
+				txtNombre.setColumns(10);
 			}
 			{
 				lblNewLabel_5 = new JLabel("Tipo de Licor:");
@@ -81,10 +91,10 @@ public class GUIFormulario extends JInternalFrame implements ActionListener {
 				getContentPane().add(lblNewLabel_5);
 			}
 			{
-				comboBox = new JComboBox();
-				comboBox.setFont(new Font("Tahoma", Font.PLAIN, 14));
-				comboBox.setModel(new DefaultComboBoxModel(new String[] {"Ron", "Vodka", "Whisky", "Cerveza de trigo"}));
-				getContentPane().add(comboBox);
+				cmbTipo = new JComboBox();
+				cmbTipo.setFont(new Font("Tahoma", Font.PLAIN, 14));
+				cmbTipo.setModel(new DefaultComboBoxModel(new String[] {"Ron", "Vodka", "Whisky", "Cerveza de trigo"}));
+				getContentPane().add(cmbTipo);
 			}
 			{
 				lblNewLabel_7 = new JLabel("Precio:");
@@ -92,10 +102,10 @@ public class GUIFormulario extends JInternalFrame implements ActionListener {
 				getContentPane().add(lblNewLabel_7);
 			}
 			{
-				textField_3 = new JTextField();
-				textField_3.setFont(new Font("Tahoma", Font.PLAIN, 14));
-				getContentPane().add(textField_3);
-				textField_3.setColumns(10);
+				txtPrecio = new JTextField();
+				txtPrecio.setFont(new Font("Tahoma", Font.PLAIN, 14));
+				getContentPane().add(txtPrecio);
+				txtPrecio.setColumns(10);
 			}
 			{
 				lblNewLabel_6 = new JLabel("Stock disponible:");
@@ -103,24 +113,28 @@ public class GUIFormulario extends JInternalFrame implements ActionListener {
 				getContentPane().add(lblNewLabel_6);
 			}
 			{
-				textField_4 = new JTextField();
-				textField_4.setFont(new Font("Tahoma", Font.PLAIN, 14));
-				getContentPane().add(textField_4);
-				textField_4.setColumns(10);
+				txtStock = new JTextField();
+				txtStock.setFont(new Font("Tahoma", Font.PLAIN, 14));
+				getContentPane().add(txtStock);
+				txtStock.setColumns(10);
 			}
 		}
 		btnSalir = new JButton("Cancelar");
 		btnSalir.setFont(new Font("Tahoma", Font.BOLD, 14));
 		btnSalir.addActionListener(this);
 		{
-			btnNewButton = new JButton("Guardar");
-			btnNewButton.setFont(new Font("Tahoma", Font.BOLD, 14));
-			getContentPane().add(btnNewButton);
+			btnGuardar = new JButton("Guardar");
+			btnGuardar.addActionListener(this);
+			btnGuardar.setFont(new Font("Tahoma", Font.BOLD, 14));
+			getContentPane().add(btnGuardar);
 		}
 		getContentPane().add(btnSalir);
 
 	}
 	public void actionPerformed(ActionEvent e) {
+		if (e.getSource() == btnGuardar) {
+			do_btnGuardar_actionPerformed(e);
+		}
 		if (e.getSource() == btnSalir) {
 			do_btnSalir_actionPerformed(e);
 		}
@@ -128,4 +142,28 @@ public class GUIFormulario extends JInternalFrame implements ActionListener {
 	protected void do_btnSalir_actionPerformed(ActionEvent e) {
 		dispose();
 	}
+	protected void do_btnGuardar_actionPerformed(ActionEvent e) {
+		String codigo = txtCodigo.getText().trim();
+		String nombre = txtNombre.getText().trim();
+		String tipo = (String) cmbTipo.getSelectedItem();
+		try {
+			double precio = Double.parseDouble(txtPrecio.getText().trim());
+			int stock = Integer.parseInt(txtStock.getText().trim());
+
+			Producto producto = new Producto(codigo, nombre, tipo, precio, stock);
+
+			controlador.agregarProducto(producto);
+
+			JOptionPane.showMessageDialog(this, "Producto guardado correctamente.");
+
+			txtCodigo.setText("");
+			txtNombre.setText("");
+			txtPrecio.setText("");
+			txtStock.setText("");
+			cmbTipo.setSelectedIndex(0);
+
+		} catch (NumberFormatException ex) {
+			JOptionPane.showMessageDialog(this, "Por favor, ingrese valores válidos.");
+		}
+    }
 }

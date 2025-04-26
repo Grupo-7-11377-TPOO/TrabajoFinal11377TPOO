@@ -5,6 +5,9 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import controlador.ProductoControlador;
+
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JDesktopPane;
@@ -24,6 +27,7 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 	private JDesktopPane desktopPane;
 	private JMenuItem mntmNewMenuItem;
 	private JMenuItem mntmNewMenuItem_1;
+	private ProductoControlador controlador;
 
 	/**
 	 * Launch the application.
@@ -44,10 +48,13 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 	/**
 	 * Create the frame.
 	 */
+	
 	public VentanaPrincipal() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		controlador = new ProductoControlador();
 		setBounds(100, 100, 555, 403);
 		{
+			
 			menuBar = new JMenuBar();
 			setJMenuBar(menuBar);
 			{
@@ -98,7 +105,7 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 
 	protected void do_mntmNewMenuItem_actionPerformed(ActionEvent e) {
 		if (formulario == null || formulario.isClosed()) {
-	        formulario = new GUIFormulario();
+	        formulario = new GUIFormulario(controlador);
 	        desktopPane.add(formulario);
 	        centrarInternalFrame(formulario);
 	        formulario.setVisible(true);
@@ -112,7 +119,7 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 	}
 	protected void do_mntmNewMenuItem_1_actionPerformed(ActionEvent e) {
 		if (tabla == null || tabla.isClosed()) {
-	        tabla = new GUITablaProductos();
+	        tabla = new GUITablaProductos(controlador);
 	        desktopPane.add(tabla);
 	        centrarInternalFrame(tabla);
 	        tabla.setVisible(true);
