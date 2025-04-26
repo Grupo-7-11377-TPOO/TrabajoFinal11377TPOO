@@ -1,7 +1,7 @@
 package Modelo;
 
 public class Producto {
-	//Aquí habrá un cambio dentro del proyecto final
+	//( ͡° ͜ʖ ͡°)
 	private String codigo;
     private String nombre;
     private String tipo;
