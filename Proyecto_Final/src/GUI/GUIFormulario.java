@@ -86,14 +86,15 @@ public class GUIFormulario extends JInternalFrame implements ActionListener {
 				txtNombre.setColumns(10);
 			}
 			{
-				lblNewLabel_5 = new JLabel("Tipo de Licor:");
+				lblNewLabel_5 = new JLabel("Tipo de producto:");
 				lblNewLabel_5.setFont(new Font("Tahoma", Font.PLAIN, 14));
 				getContentPane().add(lblNewLabel_5);
 			}
 			{
 				cmbTipo = new JComboBox();
+				cmbTipo.setToolTipText("");
 				cmbTipo.setFont(new Font("Tahoma", Font.PLAIN, 14));
-				cmbTipo.setModel(new DefaultComboBoxModel(new String[] {"Ron", "Vodka", "Whisky", "Cerveza de trigo"}));
+				cmbTipo.setModel(new DefaultComboBoxModel(new String[] {"Alimentos", "Bebidas", "Limpieza", "Cuidado personal"}));
 				getContentPane().add(cmbTipo);
 			}
 			{
