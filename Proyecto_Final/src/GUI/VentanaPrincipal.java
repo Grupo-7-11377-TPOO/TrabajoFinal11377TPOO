@@ -51,7 +51,7 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 	 */
 	
 	public VentanaPrincipal() {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		controlador = new ProductoControlador();
 		setBounds(100, 100, 555, 403);
 		{
@@ -78,6 +78,17 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 					mnNewMenu_1.add(mntmNewMenuItem_1);
 				}
 			}
+			
+			JMenu mnNewMenu_2 = new JMenu("Ayuda");
+			menuBar.add(mnNewMenu_2);
+			
+			JMenuItem mntmNewMenuItem_2 = new JMenuItem("Salir");
+			mntmNewMenuItem_2.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					do_mntmNewMenuItem_2_actionPerformed(e);
+				}
+			});
+			mnNewMenu_2.add(mntmNewMenuItem_2);
 		}
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -136,5 +147,9 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 	    int x = (desktopPane.getWidth() - frame.getWidth()) / 2;
 	    int y = (desktopPane.getHeight() - frame.getHeight()) / 2;
 	    frame.setLocation(x, y);
+	}
+	
+	protected void do_mntmNewMenuItem_2_actionPerformed(ActionEvent e) {
+		System.exit(0);
 	}
 }
