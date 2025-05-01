@@ -1,5 +1,5 @@
 package controlador;
-//Prueba del commit 1
+//Prueba del commit
 import java.util.ArrayList;
 import Modelo.Producto;
 
