@@ -3,6 +3,7 @@ package Modelo;
 public class Producto {
 	//( ͡° ͜ʖ ͡°)
 	private String codigo;
+	private String Categoria;
     private String nombre;
     private String tipo;
     private double precio;
@@ -13,6 +14,9 @@ public class Producto {
 		this.tipo = tipo;
 		this.precio = precio;
 		this.stock = stock;
+	}
+	public Producto(String categoria) {
+		Categoria = categoria;
 	}
 	public String getCodigo() {
 		return codigo;
@@ -43,6 +47,12 @@ public class Producto {
 	}
 	public void setStock(int stock) {
 		this.stock = stock;
+	}
+	public String getCategoria() {
+		return Categoria;
+	}
+	public void setCategoria(String categoria) {
+		Categoria = categoria;
 	}
 	
     
