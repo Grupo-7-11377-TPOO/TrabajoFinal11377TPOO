@@ -151,7 +151,7 @@ public class GUITablaProductos extends JInternalFrame implements ActionListener 
 	        JOptionPane.showMessageDialog(this, "Seleccione un producto para eliminar.");
 	    }
 	}
-	//Actualizar
+	//Actualiza
 	protected void do_btnNewButton_2_actionPerformed(ActionEvent e) {
 		cargarDatosEnTabla();
 	}
