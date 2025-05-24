@@ -2,22 +2,15 @@ package Modelo;
 
 public class Producto {
 	//( ͡° ͜ʖ ͡°)
-	private String codigo;
+	private int codigo;
     private String nombre;
-    private String tipo;
     private double precio;
     private int stock;
-	public Producto(String codigo, String nombre, String tipo, double precio, int stock) {
-		this.codigo = codigo;
-		this.nombre = nombre;
-		this.tipo = tipo;
-		this.precio = precio;
-		this.stock = stock;
-	}
-	public String getCodigo() {
+
+	public int getCodigo() {
 		return codigo;
 	}
-	public void setCodigo(String codigo) {
+	public void setCodigo(int codigo) {
 		this.codigo = codigo;
 	}
 	public String getNombre() {
@@ -25,12 +18,6 @@ public class Producto {
 	}
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
-	}
-	public String getTipo() {
-		return tipo;
-	}
-	public void setTipo(String tipo) {
-		this.tipo = tipo;
 	}
 	public double getPrecio() {
 		return precio;

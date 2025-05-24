@@ -26,14 +26,12 @@ public class GUIFormulario extends JInternalFrame implements ActionListener {
 	private JButton btnSalir;
 	private JLabel lblNewLabel;
 	private JLabel lblNewLabel_3;
-	private JLabel lblNewLabel_5;
 	private JLabel lblNewLabel_6;
 	private JLabel lblNewLabel_7;
 	private JTextField txtCodigo;
 	private JTextField txtNombre;
 	private JTextField txtPrecio;
-	private JTextField txtStock;
-	private JComboBox cmbTipo;
+	private JTextField txtCantidad;
 	private JButton btnGuardar;
 
 	/**
@@ -59,12 +57,12 @@ public class GUIFormulario extends JInternalFrame implements ActionListener {
 	
 	public GUIFormulario(ProductoControlador controlador) {
 		this.controlador = controlador;
-		setTitle("Abierto");
+		setTitle("Ventana de Compra");
 		setBounds(100, 100, 539, 342);
 		{
 			getContentPane().setLayout(new GridLayout(0, 2, 0, 0));
 			{
-				lblNewLabel = new JLabel("Código del producto:");
+				lblNewLabel = new JLabel("Id del Producto:");
 				lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 14));
 				getContentPane().add(lblNewLabel);
 			}
@@ -86,18 +84,7 @@ public class GUIFormulario extends JInternalFrame implements ActionListener {
 				txtNombre.setColumns(10);
 			}
 			{
-				lblNewLabel_5 = new JLabel("Tipo de Licor:");
-				lblNewLabel_5.setFont(new Font("Tahoma", Font.PLAIN, 14));
-				getContentPane().add(lblNewLabel_5);
-			}
-			{
-				cmbTipo = new JComboBox();
-				cmbTipo.setFont(new Font("Tahoma", Font.PLAIN, 14));
-				cmbTipo.setModel(new DefaultComboBoxModel(new String[] {"Ron", "Vodka", "Whisky", "Cerveza de trigo"}));
-				getContentPane().add(cmbTipo);
-			}
-			{
-				lblNewLabel_7 = new JLabel("Precio:");
+				lblNewLabel_7 = new JLabel("Precio por Unidad:");
 				lblNewLabel_7.setFont(new Font("Tahoma", Font.PLAIN, 14));
 				getContentPane().add(lblNewLabel_7);
 			}
@@ -108,15 +95,15 @@ public class GUIFormulario extends JInternalFrame implements ActionListener {
 				txtPrecio.setColumns(10);
 			}
 			{
-				lblNewLabel_6 = new JLabel("Stock disponible:");
+				lblNewLabel_6 = new JLabel("Cantidad:");
 				lblNewLabel_6.setFont(new Font("Tahoma", Font.PLAIN, 14));
 				getContentPane().add(lblNewLabel_6);
 			}
 			{
-				txtStock = new JTextField();
-				txtStock.setFont(new Font("Tahoma", Font.PLAIN, 14));
-				getContentPane().add(txtStock);
-				txtStock.setColumns(10);
+				txtCantidad = new JTextField();
+				txtCantidad.setFont(new Font("Tahoma", Font.PLAIN, 14));
+				getContentPane().add(txtCantidad);
+				txtCantidad.setColumns(10);
 			}
 		}
 		btnSalir = new JButton("Cancelar");
@@ -143,27 +130,56 @@ public class GUIFormulario extends JInternalFrame implements ActionListener {
 		dispose();
 	}
 	protected void do_btnGuardar_actionPerformed(ActionEvent e) {
-		String codigo = txtCodigo.getText().trim();
-		String nombre = txtNombre.getText().trim();
-		String tipo = (String) cmbTipo.getSelectedItem();
-		try {
-			double precio = Double.parseDouble(txtPrecio.getText().trim());
-			int stock = Integer.parseInt(txtStock.getText().trim());
+        // Validaciones
+        if (txtCodigo.getText().trim().isEmpty() || txtNombre.getText().trim().isEmpty() ||
+            txtPrecio.getText().trim().isEmpty() || txtCantidad.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Por favor, complete todos los campos.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
 
-			Producto producto = new Producto(codigo, nombre, tipo, precio, stock);
+        int id;
+        double precio;
+        int stock;
 
-			controlador.agregarProducto(producto);
+        try {
+            id = Integer.parseInt(txtCodigo.getText().trim());
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this, "ID debe ser un número entero válido.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
 
-			JOptionPane.showMessageDialog(this, "Producto guardado correctamente.");
+        try {
+            precio = Double.parseDouble(txtPrecio.getText().trim());
+            if (precio < 0) {
+                JOptionPane.showMessageDialog(this, "Precio no puede ser negativo.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this, "Precio debe ser un número válido.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
 
-			txtCodigo.setText("");
-			txtNombre.setText("");
-			txtPrecio.setText("");
-			txtStock.setText("");
-			cmbTipo.setSelectedIndex(0);
+        try {
+            stock = Integer.parseInt(txtCantidad.getText().trim());
+            if (stock < 0) {
+                JOptionPane.showMessageDialog(this, "Stock no puede ser negativo.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this, "Stock debe ser un número entero válido.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
 
-		} catch (NumberFormatException ex) {
-			JOptionPane.showMessageDialog(this, "Por favor, ingrese valores válidos.");
-		}
+        String nombre = txtNombre.getText().trim();
+
+        Producto producto = new Producto();
+        producto.setCodigo(id);
+        producto.setNombre(nombre);
+        producto.setPrecio(precio);
+        producto.setStock(stock);
+
+        controlador.agregarProducto(producto);
+
+        JOptionPane.showMessageDialog(this, "Producto agregado con éxito.");
     }
 }

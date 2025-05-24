@@ -95,9 +95,9 @@ public class GUITablaProductos extends JInternalFrame implements ActionListener 
 		}
 	}
 	//Buscar
-	private Producto buscarProductoPorCodigo(String codigo) {
+	private Producto buscarProductoPorCodigo(int codigo) {
 	    for (Producto p : controlador.listarProductos()) {
-	        if (p.getCodigo().equalsIgnoreCase(codigo)) {
+	        if (p.getCodigo() == codigo) {
 	            return p;
 	        }
 	    }
@@ -107,7 +107,7 @@ public class GUITablaProductos extends JInternalFrame implements ActionListener 
 	protected void do_btnNewButton_actionPerformed(ActionEvent e) {
 		int filaSeleccionada = table.getSelectedRow();
 	    if (filaSeleccionada != -1) {
-	        String codigo = table.getValueAt(filaSeleccionada, 0).toString();
+	    	int codigo = Integer.parseInt(table.getValueAt(filaSeleccionada, 0).toString());
 	        Producto producto = buscarProductoPorCodigo(codigo);
 	        if (producto != null) {
 	            String nuevoNombre = JOptionPane.showInputDialog(this, "Nuevo nombre:", producto.getNombre());
@@ -131,7 +131,7 @@ public class GUITablaProductos extends JInternalFrame implements ActionListener 
 	protected void do_btnNewButton_1_actionPerformed(ActionEvent e) {
 		int filaSeleccionada = table.getSelectedRow();
 	    if (filaSeleccionada != -1) {
-	        String codigo = table.getValueAt(filaSeleccionada, 0).toString();
+	    	int codigo = Integer.parseInt(table.getValueAt(filaSeleccionada, 0).toString());
 	        Producto producto = buscarProductoPorCodigo(codigo);
 	        if (producto != null) {
 	            int confirmacion = JOptionPane.showConfirmDialog(this, "¿Está seguro de eliminar el producto?", "Confirmar", JOptionPane.YES_NO_OPTION);
@@ -152,11 +152,11 @@ public class GUITablaProductos extends JInternalFrame implements ActionListener 
 	private void cargarDatosEnTabla() {
 		List<Producto> productos = controlador.listarProductos();
 
-		String[] columnas = { "ID", "Nombre", "Precio" ,"Tipo","Stock"};
+		String[] columnas = { "ID", "Nombre", "Precio" ,"Stock"};
 		DefaultTableModel modelo = new DefaultTableModel(columnas, 0);
 
 		for (Producto p : productos) {
-			Object[] fila = { p.getCodigo(), p.getNombre(), p.getPrecio(), p.getTipo(), p.getStock()};
+			Object[] fila = { p.getCodigo(), p.getNombre(), p.getPrecio(), p.getStock()};
 			modelo.addRow(fila);
 		}
 
