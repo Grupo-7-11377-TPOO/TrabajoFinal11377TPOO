@@ -163,7 +163,7 @@ public class GUITablaProductos extends JInternalFrame implements ActionListener 
 
 		for (Producto p : productos) {
 			Object[] fila = { p.getCodigo(), p.getNombre(), p.getPrecio(), p.getStock()};
-			modelo.addRow(fila);
+			modelo.addRow(fila); 
 		}
 
 		table.setModel(modelo);
