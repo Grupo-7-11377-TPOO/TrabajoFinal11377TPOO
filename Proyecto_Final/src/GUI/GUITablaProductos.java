@@ -107,20 +107,26 @@ public class GUITablaProductos extends JInternalFrame implements ActionListener 
 	protected void do_btnNewButton_actionPerformed(ActionEvent e) {
 		int filaSeleccionada = table.getSelectedRow();
 	    if (filaSeleccionada != -1) {
-	    	int codigo = Integer.parseInt(table.getValueAt(filaSeleccionada, 0).toString());
+	        int codigo = Integer.parseInt(table.getValueAt(filaSeleccionada, 0).toString());
 	        Producto producto = buscarProductoPorCodigo(codigo);
 	        if (producto != null) {
 	            String nuevoNombre = JOptionPane.showInputDialog(this, "Nuevo nombre:", producto.getNombre());
 	            String nuevoPrecioStr = JOptionPane.showInputDialog(this, "Nuevo precio:", producto.getPrecio());
+	            String nuevoStockStr = JOptionPane.showInputDialog(this, "Nuevo stock:", producto.getStock());
 
 	            try {
 	                double nuevoPrecio = Double.parseDouble(nuevoPrecioStr);
+	                int nuevoStock = Integer.parseInt(nuevoStockStr);
+
 	                producto.setNombre(nuevoNombre);
 	                producto.setPrecio(nuevoPrecio);
+	                producto.setStock(nuevoStock);
+
+	                controlador.actualizarProducto(producto); // ACTUALIZA EN BD
 	                JOptionPane.showMessageDialog(this, "Producto actualizado.");
 	                cargarDatosEnTabla();
 	            } catch (NumberFormatException ex) {
-	                JOptionPane.showMessageDialog(this, "Precio inválido.");
+	                JOptionPane.showMessageDialog(this, "Precio o stock inválido.");
 	            }
 	        }
 	    } else {
