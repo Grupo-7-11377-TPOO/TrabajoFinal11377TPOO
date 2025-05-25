@@ -121,6 +121,14 @@ public class GUITablaProductos extends JInternalFrame implements ActionListener 
 	                producto.setNombre(nuevoNombre);
 	                producto.setPrecio(nuevoPrecio);
 	                producto.setStock(nuevoStock);
+	                if (nuevoStock <= 0) {
+	                    JOptionPane.showMessageDialog(this, "La cantidad debe ser mayor que cero.");
+	                    return;
+	                }
+	                if (nuevoPrecio <= 0) { 
+	                    JOptionPane.showMessageDialog(this, "El precio unitario debe ser mayor que cero.");
+	                    return;
+	                }
 
 	                controlador.actualizarProducto(producto); // ACTUALIZA EN BD
 	                JOptionPane.showMessageDialog(this, "Producto actualizado.");

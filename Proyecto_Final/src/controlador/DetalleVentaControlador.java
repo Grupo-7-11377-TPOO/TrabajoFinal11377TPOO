@@ -82,7 +82,8 @@ public class DetalleVentaControlador {
     }
 
     public void actualizarDetalle(DetalleVenta detalle) {
-        String sql = "UPDATE DetalleVenta SET idProducto = ?, idEmpleado = ?, cantidad = ?, precio_unitario = ?, fecha_venta = ? WHERE idDetalle = ?";
+    	
+    	String sql = "UPDATE DetalleVenta SET idProducto = ?, idEmpleado = ?, cantidad = ?, precio_unitario = ?, fecha_venta = ? WHERE idDetalle = ?";
 
         try (Connection conn = ConexionBD.getConexion();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -99,7 +100,7 @@ public class DetalleVentaControlador {
             e.printStackTrace();
         }
     }
-    private boolean existeProducto(int idProducto) {
+    public boolean existeProducto(int idProducto) {
         String sql = "SELECT 1 FROM Productos WHERE idProducto = ?";
         try (Connection conn = ConexionBD.getConexion();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -113,7 +114,7 @@ public class DetalleVentaControlador {
         return false;
     }
 
-    private boolean existeEmpleado(int idEmpleado) {
+    public boolean existeEmpleado(int idEmpleado) {
         String sql = "SELECT 1 FROM Empleados WHERE idEmpleado = ?";
         try (Connection conn = ConexionBD.getConexion();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -125,6 +126,29 @@ public class DetalleVentaControlador {
             e.printStackTrace();
         }
         return false;
+    }
+    public DetalleVenta buscarPorId(int id) {
+        String sql = "SELECT * FROM DetalleVenta WHERE idDetalle = ?";
+        try (Connection conn = ConexionBD.getConexion();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, id);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    DetalleVenta d = new DetalleVenta();
+                    d.setIdDetalle(rs.getInt("idDetalle"));
+                    d.setIdProducto(rs.getInt("idProducto"));
+                    d.setIdEmpleado(rs.getInt("idEmpleado"));
+                    d.setCantidad(rs.getInt("cantidad"));
+                    d.setPrecioUnitario(rs.getDouble("precio_unitario"));
+                    d.setFechaVenta(rs.getDate("fecha_venta"));
+                    return d;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 }

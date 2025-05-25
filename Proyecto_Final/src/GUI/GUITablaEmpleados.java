@@ -133,10 +133,14 @@ public class GUITablaEmpleados extends JInternalFrame implements ActionListener 
 
 	            try {
 	                int nuevoTelefono = Integer.parseInt(nuevoTelefonoStr);
-
-	                empleado.setNombre(nuevoNombre);
+	                
+	                empleado.setNombre(nuevoNombre); 
 	                empleado.setApellido(nuevoApellido);
 	                empleado.setTelefono(nuevoTelefono);
+	                if (nuevoTelefono <= 0) {
+	                    JOptionPane.showMessageDialog(this, "El teléfono no debe ser negativo");
+	                    return;
+	                }
 
 	                controlador.actualizarEmpleado(empleado); // ACTUALIZA EN BD
 	                JOptionPane.showMessageDialog(this, "Empleado actualizado.");

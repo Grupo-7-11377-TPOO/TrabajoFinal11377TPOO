@@ -51,7 +51,7 @@ public class ProductoControlador {
 	        JOptionPane.showMessageDialog(null, "Error: el ID del producto ya existe en la base de datos.");
 	    } catch (SQLException e) {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Error al agregar empleado: " + e.getMessage());
+            JOptionPane.showMessageDialog(null, "Error al agregar Producto: " + e.getMessage());
         }
     }
 

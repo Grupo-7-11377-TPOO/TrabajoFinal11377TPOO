@@ -32,6 +32,7 @@ public class GUIDetalleVenta extends JInternalFrame implements ActionListener {
 	private JButton btnSalir;
 	private JLabel lblNewLabel_5;
 	private JTextField txtFecha;
+	private DetalleVentaControlador controlador = new DetalleVentaControlador();
 
 	/**
 	 * Launch the application.
@@ -158,7 +159,16 @@ public class GUIDetalleVenta extends JInternalFrame implements ActionListener {
 	        int idEmpleado = Integer.parseInt(txtIdEmpleado.getText());
 	        int cantidad = Integer.parseInt(txtCantidad.getText());
 	        double precio = Double.parseDouble(txtPrecioUnitario.getText());
+	        
+	        if (!controlador.existeProducto(idProducto)) {
+                JOptionPane.showMessageDialog(this, "Error: El ID de producto no existe.");
+                return;
+            }
 
+            if (!controlador.existeEmpleado(idEmpleado)) {
+                JOptionPane.showMessageDialog(this, "Error: El ID de empleado no existe.");
+                return;
+            }
 	        // Validar valores negativos
 	        if (idDetalle < 0 || idProducto < 0 || idEmpleado < 0 || cantidad < 0 || precio < 0) {
 	            JOptionPane.showMessageDialog(this, "No se permiten valores negativos.", "Valor inválido", JOptionPane.WARNING_MESSAGE);
@@ -178,7 +188,6 @@ public class GUIDetalleVenta extends JInternalFrame implements ActionListener {
 	        DetalleVentaControlador controlador = new DetalleVentaControlador();
 	        controlador.agregarDetalle(detalle);
 
-	        JOptionPane.showMessageDialog(this, "Detalle de venta agregado exitosamente.");
 	        limpiarCampos();
 	    } catch (NumberFormatException ex) {
 	        JOptionPane.showMessageDialog(this, "Verifica que los campos numéricos (ID, cantidad, precio) sean válidos.", "Error de formato", JOptionPane.ERROR_MESSAGE);

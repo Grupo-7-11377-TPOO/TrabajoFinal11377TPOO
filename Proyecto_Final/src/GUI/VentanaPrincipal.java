@@ -6,6 +6,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import controlador.DetalleVentaControlador;
 import controlador.EmpleadoControlador;
 import controlador.ProductoControlador;
 
@@ -31,11 +32,13 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 	private JMenuItem mntmNewMenuItem_1;
 	private ProductoControlador controlador;
 	private EmpleadoControlador controladorEmpleado;
+	private DetalleVentaControlador controladorDetalle;
     private GUIFormulario formulario;
     private GUITablaProductos tabla;
     private GUIEmpleados empleados;
     private GUITablaEmpleados tablaEmpleados;
     private GUIDetalleVenta detalleVenta;
+    private GUITablaDetalleVenta tablaDetalleVenta;
 	private JMenuItem mntmNewMenuItem_2;
 	private JMenuItem mntmNewMenuItem_3;
 	private JMenuItem mntmNewMenuItem_4;
@@ -65,6 +68,7 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		controlador = new ProductoControlador();
 		controladorEmpleado = new EmpleadoControlador();
+		controladorDetalle = new DetalleVentaControlador();
 		setBounds(100, 100, 555, 403);
 		{
 			
@@ -101,6 +105,7 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 				}
 				{
 					mntmNewMenuItem_3 = new JMenuItem("Visualizar detalle de ventas");
+					mntmNewMenuItem_3.addActionListener(this);
 					mnNewMenu_1.add(mntmNewMenuItem_3);
 				}
 				{
@@ -125,6 +130,9 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 
 
 	public void actionPerformed(ActionEvent e) {
+		if (e.getSource() == mntmNewMenuItem_3) {
+			do_mntmNewMenuItem_3_actionPerformed(e);
+		}
 		if (e.getSource() == mntmNewMenuItem_2) {
 			do_mntmNewMenuItem_2_actionPerformed(e);
 		}
@@ -225,6 +233,22 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 	    } else {
 	        try {
 	            detalleVenta.setSelected(true);  // Enfocar si ya estaba creado
+	        } catch (java.beans.PropertyVetoException ex) {
+	            ex.printStackTrace();
+	        }
+	    }
+	}
+	//menuItem que abriria la GUITablaDetalleVenta en la ventana Principal
+	protected void do_mntmNewMenuItem_3_actionPerformed(ActionEvent e) {
+		if (tablaDetalleVenta == null || tablaDetalleVenta.isClosed()) {
+	        cerrarInternalFrames();
+	        tablaDetalleVenta = new GUITablaDetalleVenta(controladorDetalle); // Instancia de la tabla
+	        desktopPane.add(tablaDetalleVenta);             // Añadir al escritorio
+	        centrarInternalFrame(tablaDetalleVenta);        // Centrar
+	        tablaDetalleVenta.setVisible(true);             // Mostrar
+	    } else {
+	        try {
+	            tablaDetalleVenta.setSelected(true);        // Enfocar si ya está creado
 	        } catch (java.beans.PropertyVetoException ex) {
 	            ex.printStackTrace();
 	        }
