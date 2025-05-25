@@ -1,7 +1,6 @@
 package Modelo;
 
 public class Producto {
-	//( ͡° ͜ʖ ͡°)
 	private int codigo;
     private String nombre;
     private double precio;

@@ -6,6 +6,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import controlador.EmpleadoControlador;
 import controlador.ProductoControlador;
 
 import javax.swing.JMenuBar;
@@ -67,15 +68,32 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 					mntmNewMenuItem.addActionListener(this);
 					mnNewMenu.add(mntmNewMenuItem);
 				}
+				{
+					mntmNewMenuItem_2 = new JMenuItem("Venta");
+					mnNewMenu.add(mntmNewMenuItem_2);
+				}
+				{
+					mntmNewMenuItem_5 = new JMenuItem("Empleado");
+					mntmNewMenuItem_5.addActionListener(this);
+					mnNewMenu.add(mntmNewMenuItem_5);
+				}
 			}
 			{
-				mnNewMenu_1 = new JMenu("Tabla de productos");
+				mnNewMenu_1 = new JMenu("Tablas");
 				mnNewMenu_1.addActionListener(this);
 				menuBar.add(mnNewMenu_1);
 				{
-					mntmNewMenuItem_1 = new JMenuItem("Visualizar");
+					mntmNewMenuItem_1 = new JMenuItem("Visualizar Inventario");
 					mntmNewMenuItem_1.addActionListener(this);
 					mnNewMenu_1.add(mntmNewMenuItem_1);
+				}
+				{
+					mntmNewMenuItem_3 = new JMenuItem("Visualizar detalle de ventas");
+					mnNewMenu_1.add(mntmNewMenuItem_3);
+				}
+				{
+					mntmNewMenuItem_4 = new JMenuItem("Visualizar Empleados");
+					mnNewMenu_1.add(mntmNewMenuItem_4);
 				}
 			}
 		}
@@ -94,6 +112,9 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 
 
 	public void actionPerformed(ActionEvent e) {
+		if (e.getSource() == mntmNewMenuItem_5) {
+			do_mntmNewMenuItem_5_actionPerformed(e);
+		}
 		if (e.getSource() == mntmNewMenuItem_1) {
 			do_mntmNewMenuItem_1_actionPerformed(e);
 		}
@@ -103,6 +124,11 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 	}
 	private GUIFormulario formulario;
 	private GUITablaProductos tabla;
+	private GUIEmpleados empleados;
+	private JMenuItem mntmNewMenuItem_2;
+	private JMenuItem mntmNewMenuItem_3;
+	private JMenuItem mntmNewMenuItem_4;
+	private JMenuItem mntmNewMenuItem_5;
 
 	protected void do_mntmNewMenuItem_actionPerformed(ActionEvent e) {
 		if (formulario == null || formulario.isClosed()) {
@@ -136,5 +162,20 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 	    int x = (desktopPane.getWidth() - frame.getWidth()) / 2;
 	    int y = (desktopPane.getHeight() - frame.getHeight()) / 2;
 	    frame.setLocation(x, y);
+	}
+	//menuitem que abriria la GUIEmpleados en la ventanaPrincipal
+	protected void do_mntmNewMenuItem_5_actionPerformed(ActionEvent e) {
+		if (empleados == null || empleados.isClosed()) {
+	        empleados = new GUIEmpleados(); // Crear nueva instancia
+	        desktopPane.add(empleados);     // Añadir al escritorio
+	        centrarInternalFrame(empleados); // Centrarlo
+	        empleados.setVisible(true);     // Mostrarlo
+	    } else {
+	        try {
+	            empleados.setSelected(true); // Enfocar si ya estaba creado
+	        } catch (java.beans.PropertyVetoException ex) {
+	            ex.printStackTrace();
+	        }
+	    }
 	}
 }
