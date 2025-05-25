@@ -17,6 +17,7 @@ import javax.swing.JOptionPane;
 public class GUIEmpleados extends JInternalFrame implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
+	private EmpleadoControlador controlador;
 	private JLabel lblNewLabel;
 	private JTextField txtIdEmpleado;
 	private JLabel lblNewLabel_1;
@@ -31,12 +32,13 @@ public class GUIEmpleados extends JInternalFrame implements ActionListener {
 	/**
 	 * Launch the application.
 	 */
-	private EmpleadoControlador controlador = new EmpleadoControlador();
+	
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					GUIEmpleados frame = new GUIEmpleados();
+					EmpleadoControlador controlador = new EmpleadoControlador();
+					GUIEmpleados frame = new GUIEmpleados(controlador);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -48,7 +50,8 @@ public class GUIEmpleados extends JInternalFrame implements ActionListener {
 	/**
 	 * Create the frame.
 	 */
-	public GUIEmpleados() {
+	public GUIEmpleados(EmpleadoControlador controlador) {
+		this.controlador = controlador;
 		setTitle("Ventana de Empleados");
 		setBounds(100, 100, 539, 342);
 		getContentPane().setLayout(new GridLayout(0, 2, 0, 0));

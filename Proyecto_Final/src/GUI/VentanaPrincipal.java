@@ -30,6 +30,15 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 	private JMenuItem mntmNewMenuItem;
 	private JMenuItem mntmNewMenuItem_1;
 	private ProductoControlador controlador;
+	private EmpleadoControlador controladorEmpleado;
+    private GUIFormulario formulario;
+    private GUITablaProductos tabla;
+    private GUIEmpleados empleados;
+    private GUITablaEmpleados tablaEmpleados;
+	private JMenuItem mntmNewMenuItem_2;
+	private JMenuItem mntmNewMenuItem_3;
+	private JMenuItem mntmNewMenuItem_4;
+	private JMenuItem mntmNewMenuItem_5;
 
 	/**
 	 * Launch the application.
@@ -54,6 +63,7 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 	public VentanaPrincipal() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		controlador = new ProductoControlador();
+		controladorEmpleado = new EmpleadoControlador();
 		setBounds(100, 100, 555, 403);
 		{
 			
@@ -93,6 +103,7 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 				}
 				{
 					mntmNewMenuItem_4 = new JMenuItem("Visualizar Empleados");
+					mntmNewMenuItem_4.addActionListener(this);
 					mnNewMenu_1.add(mntmNewMenuItem_4);
 				}
 			}
@@ -112,6 +123,9 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 
 
 	public void actionPerformed(ActionEvent e) {
+		if (e.getSource() == mntmNewMenuItem_4) {
+			do_mntmNewMenuItem_4_actionPerformed(e);
+		}
 		if (e.getSource() == mntmNewMenuItem_5) {
 			do_mntmNewMenuItem_5_actionPerformed(e);
 		}
@@ -122,13 +136,7 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 			do_mntmNewMenuItem_actionPerformed(e);
 		}
 	}
-	private GUIFormulario formulario;
-	private GUITablaProductos tabla;
-	private GUIEmpleados empleados;
-	private JMenuItem mntmNewMenuItem_2;
-	private JMenuItem mntmNewMenuItem_3;
-	private JMenuItem mntmNewMenuItem_4;
-	private JMenuItem mntmNewMenuItem_5;
+    
 
 	protected void do_mntmNewMenuItem_actionPerformed(ActionEvent e) {
 		if (formulario == null || formulario.isClosed()) {
@@ -166,7 +174,7 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 	//menuitem que abriria la GUIEmpleados en la ventanaPrincipal
 	protected void do_mntmNewMenuItem_5_actionPerformed(ActionEvent e) {
 		if (empleados == null || empleados.isClosed()) {
-	        empleados = new GUIEmpleados(); // Crear nueva instancia
+	        empleados = new GUIEmpleados(controladorEmpleado); // Crear nueva instancia
 	        desktopPane.add(empleados);     // Añadir al escritorio
 	        centrarInternalFrame(empleados); // Centrarlo
 	        empleados.setVisible(true);     // Mostrarlo
@@ -177,5 +185,21 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 	            ex.printStackTrace();
 	        }
 	    }
+	}
+	//menuitem que abriria la GUITablaEmpleados en la ventanaPrincipal
+	protected void do_mntmNewMenuItem_4_actionPerformed(ActionEvent e) {
+		if (tablaEmpleados == null || tablaEmpleados.isClosed()) {
+            tablaEmpleados = new GUITablaEmpleados(controladorEmpleado);
+
+            desktopPane.add(tablaEmpleados);
+            centrarInternalFrame(tablaEmpleados);
+            tablaEmpleados.setVisible(true);
+        } else {
+            try {
+                tablaEmpleados.setSelected(true);
+            } catch (java.beans.PropertyVetoException e1) {
+                e1.printStackTrace();
+            }
+        }
 	}
 }
