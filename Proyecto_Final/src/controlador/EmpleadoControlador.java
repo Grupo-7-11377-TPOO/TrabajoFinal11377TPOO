@@ -2,6 +2,9 @@ package controlador;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.swing.JOptionPane;
+
 import Modelo.Empleados;
 import conexion.ConexionBD;
 import java.sql.*;
@@ -31,20 +34,25 @@ public class EmpleadoControlador {
     }
 
     public void agregarEmpleado(Empleados empleado) {
-        String sql = "INSERT INTO Empleados (idEmpleado, nombre, apellido, telefono) VALUES (?, ?, ?, ?)";
+    	 String sql = "INSERT INTO Empleados (idEmpleado, nombre, apellido, telefono) VALUES (?, ?, ?, ?)";
+    	    try (Connection conn = ConexionBD.getConexion();
+    	         PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-        try (Connection conn = ConexionBD.getConexion();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+    	        stmt.setInt(1, empleado.getIdEmpleado());
+    	        stmt.setString(2, empleado.getNombre());
+    	        stmt.setString(3, empleado.getApellido());
+    	        stmt.setInt(4, empleado.getTelefono());
 
-            stmt.setInt(1, empleado.getIdEmpleado());
-            stmt.setString(2, empleado.getNombre());
-            stmt.setString(3, empleado.getApellido());
-            stmt.setInt(4, empleado.getTelefono());
-
-            stmt.executeUpdate();
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
+    	        stmt.executeUpdate();
+    	        JOptionPane.showMessageDialog(null, "Empleado agregado exitosamente.");
+    	    } catch (SQLIntegrityConstraintViolationException ex) {
+    	        // Esto captura específicamente el error de clave primaria duplicada
+    	        JOptionPane.showMessageDialog(null, "Error: el ID del empleado ya existe en la base de datos.");
+    	    } catch (SQLException ex) {
+    	        // Otros errores de SQL
+    	        ex.printStackTrace();
+    	        JOptionPane.showMessageDialog(null, "Error al agregar empleado: " + ex.getMessage());
+    	    }
     }
 
     public void eliminarEmpleado(Empleados empleado) {

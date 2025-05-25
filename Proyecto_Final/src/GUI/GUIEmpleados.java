@@ -141,7 +141,6 @@ public class GUIEmpleados extends JInternalFrame implements ActionListener {
 			emp.setTelefono(telefono);
 
 			controlador.agregarEmpleado(emp);
-			JOptionPane.showMessageDialog(this, "Empleado registrado correctamente.");
 			limpiarCampos();
 
 		} catch (NumberFormatException ex) {

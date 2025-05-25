@@ -180,6 +180,5 @@ public class GUIFormulario extends JInternalFrame implements ActionListener {
 
         controlador.agregarProducto(producto);
 
-        JOptionPane.showMessageDialog(this, "Producto agregado con éxito.");
     }
 }

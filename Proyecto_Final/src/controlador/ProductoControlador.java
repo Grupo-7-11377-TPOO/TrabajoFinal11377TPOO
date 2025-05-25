@@ -7,6 +7,8 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JOptionPane;
+
 public class ProductoControlador {
 
     public List<Producto> listarProductos() {
@@ -44,8 +46,12 @@ public class ProductoControlador {
             stmt.setInt(4, producto.getStock());
 
             stmt.executeUpdate();
-        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Producto agregado exitosamente.");
+        } catch (SQLIntegrityConstraintViolationException ex) {
+	        JOptionPane.showMessageDialog(null, "Error: el ID del producto ya existe en la base de datos.");
+	    } catch (SQLException e) {
             e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Error al agregar empleado: " + e.getMessage());
         }
     }
 

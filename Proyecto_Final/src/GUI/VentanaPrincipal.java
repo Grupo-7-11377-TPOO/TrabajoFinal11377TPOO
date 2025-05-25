@@ -35,6 +35,7 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
     private GUITablaProductos tabla;
     private GUIEmpleados empleados;
     private GUITablaEmpleados tablaEmpleados;
+    private GUIDetalleVenta detalleVenta;
 	private JMenuItem mntmNewMenuItem_2;
 	private JMenuItem mntmNewMenuItem_3;
 	private JMenuItem mntmNewMenuItem_4;
@@ -74,12 +75,13 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 				mnNewMenu.addActionListener(this);
 				menuBar.add(mnNewMenu);
 				{
-					mntmNewMenuItem = new JMenuItem("Compra");
+					mntmNewMenuItem = new JMenuItem("Productos");
 					mntmNewMenuItem.addActionListener(this);
 					mnNewMenu.add(mntmNewMenuItem);
 				}
 				{
 					mntmNewMenuItem_2 = new JMenuItem("Venta");
+					mntmNewMenuItem_2.addActionListener(this);
 					mnNewMenu.add(mntmNewMenuItem_2);
 				}
 				{
@@ -123,6 +125,9 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 
 
 	public void actionPerformed(ActionEvent e) {
+		if (e.getSource() == mntmNewMenuItem_2) {
+			do_mntmNewMenuItem_2_actionPerformed(e);
+		}
 		if (e.getSource() == mntmNewMenuItem_4) {
 			do_mntmNewMenuItem_4_actionPerformed(e);
 		}
@@ -137,10 +142,15 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 		}
 	}
     
-
+	private void cerrarInternalFrames() {
+	    for (JInternalFrame frame : desktopPane.getAllFrames()) {
+	        frame.dispose();  // Cierra cada frame del escritorio
+	    }
+	}
 	protected void do_mntmNewMenuItem_actionPerformed(ActionEvent e) {
 		if (formulario == null || formulario.isClosed()) {
-	        formulario = new GUIFormulario(controlador);
+			cerrarInternalFrames();
+			formulario = new GUIFormulario(controlador);
 	        desktopPane.add(formulario);
 	        centrarInternalFrame(formulario);
 	        formulario.setVisible(true);
@@ -154,7 +164,8 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 	}
 	protected void do_mntmNewMenuItem_1_actionPerformed(ActionEvent e) {
 		if (tabla == null || tabla.isClosed()) {
-	        tabla = new GUITablaProductos(controlador);
+			cerrarInternalFrames();
+			tabla = new GUITablaProductos(controlador);
 	        desktopPane.add(tabla);
 	        centrarInternalFrame(tabla);
 	        tabla.setVisible(true);
@@ -174,7 +185,8 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 	//menuitem que abriria la GUIEmpleados en la ventanaPrincipal
 	protected void do_mntmNewMenuItem_5_actionPerformed(ActionEvent e) {
 		if (empleados == null || empleados.isClosed()) {
-	        empleados = new GUIEmpleados(controladorEmpleado); // Crear nueva instancia
+			cerrarInternalFrames();
+			empleados = new GUIEmpleados(controladorEmpleado); // Crear nueva instancia
 	        desktopPane.add(empleados);     // Añadir al escritorio
 	        centrarInternalFrame(empleados); // Centrarlo
 	        empleados.setVisible(true);     // Mostrarlo
@@ -189,8 +201,8 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 	//menuitem que abriria la GUITablaEmpleados en la ventanaPrincipal
 	protected void do_mntmNewMenuItem_4_actionPerformed(ActionEvent e) {
 		if (tablaEmpleados == null || tablaEmpleados.isClosed()) {
-            tablaEmpleados = new GUITablaEmpleados(controladorEmpleado);
-
+			cerrarInternalFrames();
+			tablaEmpleados = new GUITablaEmpleados(controladorEmpleado);
             desktopPane.add(tablaEmpleados);
             centrarInternalFrame(tablaEmpleados);
             tablaEmpleados.setVisible(true);
@@ -201,5 +213,21 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
                 e1.printStackTrace();
             }
         }
+	}
+	//menuItem que abriria la GUIDetalleVenta en la ventana Principal
+	protected void do_mntmNewMenuItem_2_actionPerformed(ActionEvent e) {
+		if (detalleVenta == null || detalleVenta.isClosed()) {
+	        cerrarInternalFrames();
+	        detalleVenta = new GUIDetalleVenta(); // Crear nueva instancia
+	        desktopPane.add(detalleVenta);       // Añadir al escritorio
+	        centrarInternalFrame(detalleVenta);  // Centrarlo
+	        detalleVenta.setVisible(true);       // Mostrarlo
+	    } else {
+	        try {
+	            detalleVenta.setSelected(true);  // Enfocar si ya estaba creado
+	        } catch (java.beans.PropertyVetoException ex) {
+	            ex.printStackTrace();
+	        }
+	    }
 	}
 }

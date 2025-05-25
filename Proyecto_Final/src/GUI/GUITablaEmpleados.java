@@ -112,50 +112,60 @@ public class GUITablaEmpleados extends JInternalFrame implements ActionListener 
 		};
 		table.setModel(modelo);
 	}
+	private Empleados buscarEmpleadoPorId(int id) {
+	    for (Empleados e : controlador.listarEmpleados()) {
+	        if (e.getIdEmpleado() == id) {
+	            return e;
+	        }
+	    }
+	    return null;
+	}
 	//Editar mediante un boton presionado en la tabla
 	protected void do_btnNewButton_actionPerformed(ActionEvent e) {
-		int fila = table.getSelectedRow();
-		if (fila == -1) {
-			JOptionPane.showMessageDialog(this, "Seleccione un empleado a editar.");
-			return;
-		}
+		int filaSeleccionada = table.getSelectedRow();
+	    if (filaSeleccionada != -1) {
+	        int id = Integer.parseInt(table.getValueAt(filaSeleccionada, 0).toString());
+	        Empleados empleado = buscarEmpleadoPorId(id);
+	        if (empleado != null) {
+	            String nuevoNombre = JOptionPane.showInputDialog(this, "Nuevo nombre:", empleado.getNombre());
+	            String nuevoApellido = JOptionPane.showInputDialog(this, "Nuevo apellido:", empleado.getApellido());
+	            String nuevoTelefonoStr = JOptionPane.showInputDialog(this, "Nuevo teléfono:", empleado.getTelefono());
 
-		try {
-			int id = (int) table.getValueAt(fila, 0);
-			String nombre = (String) table.getValueAt(fila, 1);
-			String apellido = (String) table.getValueAt(fila, 2);
-			int telefono = Integer.parseInt(table.getValueAt(fila, 3).toString());
+	            try {
+	                int nuevoTelefono = Integer.parseInt(nuevoTelefonoStr);
 
-			Empleados emp = new Empleados();
-			emp.setIdEmpleado(id);
-			emp.setNombre(nombre);
-			emp.setApellido(apellido);
-			emp.setTelefono(telefono);
+	                empleado.setNombre(nuevoNombre);
+	                empleado.setApellido(nuevoApellido);
+	                empleado.setTelefono(nuevoTelefono);
 
-			controlador.actualizarEmpleado(emp);
-			JOptionPane.showMessageDialog(this, "Empleado actualizado correctamente.");
-			cargarDatosTabla();
-		} catch (Exception ex) {
-			JOptionPane.showMessageDialog(this, "Error al editar: " + ex.getMessage());
-		}
+	                controlador.actualizarEmpleado(empleado); // ACTUALIZA EN BD
+	                JOptionPane.showMessageDialog(this, "Empleado actualizado.");
+	                cargarDatosTabla();
+	            } catch (NumberFormatException ex) {
+	                JOptionPane.showMessageDialog(this, "El teléfono debe ser un número entero.");
+	            }
+	        }
+	    } else {
+	        JOptionPane.showMessageDialog(this, "Seleccione un empleado para editar.");
+	    }
 	}
 	//Eliminar mediante un boton presionado en la tabla
 	protected void do_btnNewButton_1_actionPerformed(ActionEvent e) {
-		int fila = table.getSelectedRow();
-		if (fila == -1) {
-			JOptionPane.showMessageDialog(this, "Seleccione un empleado a eliminar.");
-			return;
-		}
-
-		int confirm = JOptionPane.showConfirmDialog(this, "¿Está seguro de eliminar este empleado?", "Confirmar", JOptionPane.YES_NO_OPTION);
-		if (confirm != JOptionPane.YES_OPTION) return;
-
-		int id = (int) table.getValueAt(fila, 0);
-		Empleados emp = new Empleados();
-		emp.setIdEmpleado(id);
-		controlador.eliminarEmpleado(emp);
-
-		cargarDatosTabla();
+		int filaSeleccionada = table.getSelectedRow();
+	    if (filaSeleccionada != -1) {
+	        int id = Integer.parseInt(table.getValueAt(filaSeleccionada, 0).toString());
+	        Empleados empleado = buscarEmpleadoPorId(id);
+	        if (empleado != null) {
+	            int confirmacion = JOptionPane.showConfirmDialog(this, "¿Está seguro de eliminar el empleado?", "Confirmar", JOptionPane.YES_NO_OPTION);
+	            if (confirmacion == JOptionPane.YES_OPTION) {
+	                controlador.eliminarEmpleado(empleado);
+	                JOptionPane.showMessageDialog(this, "Empleado eliminado.");
+	                cargarDatosTabla();
+	            }
+	        }
+	    } else {
+	        JOptionPane.showMessageDialog(this, "Seleccione un empleado para eliminar.");
+	    }
 	}
 	//Actualizar mediante un boton presionado en la tabla, para ver los cambios de otras personas.
 	protected void do_btnNewButton_2_actionPerformed(ActionEvent e) {
