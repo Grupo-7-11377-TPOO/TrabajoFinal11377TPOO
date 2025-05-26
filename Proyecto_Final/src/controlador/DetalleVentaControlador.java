@@ -46,6 +46,11 @@ public class DetalleVentaControlador {
             return;
         }
 
+        if (!descontarStock(detalle.getIdProducto(), detalle.getCantidad())) {
+            JOptionPane.showMessageDialog(null, "Error: Stock insuficiente para el producto con ID " + detalle.getIdProducto());
+            return;
+        }
+
         String sql = "INSERT INTO DetalleVenta (idDetalle, idProducto, idEmpleado, cantidad, precio_unitario, fecha_venta) VALUES (?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = ConexionBD.getConexion();
@@ -59,7 +64,7 @@ public class DetalleVentaControlador {
             stmt.setDate(6, detalle.getFechaVenta());
 
             stmt.executeUpdate();
-            JOptionPane.showMessageDialog(null, "Detalle de venta agregado exitosamente.");
+            JOptionPane.showMessageDialog(null, "Detalle de venta agregado y stock actualizado correctamente.");
         } catch (SQLIntegrityConstraintViolationException ex) {
             JOptionPane.showMessageDialog(null, "Error: El ID del detalle ya existe.");
         } catch (SQLException e) {
@@ -149,6 +154,23 @@ public class DetalleVentaControlador {
             e.printStackTrace();
         }
         return null;
+    }
+    private boolean descontarStock(int idProducto, int cantidadVendida) {
+        String sql = "UPDATE Productos SET Stock = Stock - ? WHERE idProducto = ? AND Stock >= ?";
+
+        try (Connection conn = ConexionBD.getConexion();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, cantidadVendida);
+            stmt.setInt(2, idProducto);
+            stmt.setInt(3, cantidadVendida);
+
+            int filasAfectadas = stmt.executeUpdate();
+            return filasAfectadas > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
 }
