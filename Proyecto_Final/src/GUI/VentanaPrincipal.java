@@ -19,6 +19,7 @@ import java.awt.event.ActionEvent;
 import javax.swing.JMenuItem;
 import java.awt.BorderLayout;
 import javax.swing.JLabel;
+import java.awt.Font;
 
 public class VentanaPrincipal extends JFrame implements ActionListener {
 
@@ -43,6 +44,7 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 	private JMenuItem mntmNewMenuItem_3;
 	private JMenuItem mntmNewMenuItem_4;
 	private JMenuItem mntmNewMenuItem_5;
+	private JLabel lblNewLabel;
 
 	/**
 	 * Launch the application.
@@ -125,6 +127,12 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 			desktopPane.setBounds(0, 0, 539, 342);
 			contentPane.add(desktopPane);
 			desktopPane.setLayout(null);
+			{
+				lblNewLabel = new JLabel("NEGOCIO DE LICORES");
+				lblNewLabel.setFont(new Font("Nirmala Text", Font.BOLD, 40));
+				lblNewLabel.setBounds(62, 140, 420, 87);
+				desktopPane.add(lblNewLabel);
+			}
 		}
 	}
 

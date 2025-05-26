@@ -45,7 +45,5 @@ public class DetalleVenta {
 	}
 	public void setFechaVenta(Date fechaVenta) {
 		this.fechaVenta = fechaVenta;
-	}
-    
-    
+	}    
 }

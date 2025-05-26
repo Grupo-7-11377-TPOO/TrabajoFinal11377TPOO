@@ -27,5 +27,4 @@ public class Empleados {
 	public void setApellido(String apellido) {
 		this.apellido = apellido;
 	}
-	
 }

@@ -189,5 +189,4 @@ public class GUITablaDetalleVenta extends JInternalFrame implements ActionListen
 	protected void do_btnActualizar_actionPerformed(ActionEvent e) {
 		cargarDatosEnTabla();
 	}
-
 }
