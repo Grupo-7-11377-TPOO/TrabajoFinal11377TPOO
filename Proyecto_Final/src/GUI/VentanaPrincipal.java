@@ -6,6 +6,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import Modelo.Empleados;
 import controlador.DetalleVentaControlador;
 import controlador.EmpleadoControlador;
 import controlador.ProductoControlador;
@@ -17,6 +18,8 @@ import javax.swing.JInternalFrame;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+
 import java.awt.BorderLayout;
 import javax.swing.JLabel;
 import java.awt.Font;
@@ -50,17 +53,28 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					VentanaPrincipal frame = new VentanaPrincipal();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
+		EventQueue.invokeLater(() -> {
+	        try {
+	            VentanaPrincipal frame = new VentanaPrincipal();
+	            frame.setVisible(true);
+
+	            // Abrir el diálogo de login después que se muestra la ventana principal
+	            GUILogin login = new GUILogin(frame, true);
+	            login.setLocationRelativeTo(frame);
+	            login.setVisible(true);
+
+	            if (!login.isLoginExitoso()) {
+	                JOptionPane.showMessageDialog(frame, "Debe iniciar sesión para continuar.");
+	                System.exit(0);
+	            }
+	            Empleados usuarioLogueado = login.getUsuarioActual();
+
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	        }
+	    });
 	}
+	
 
 	/**
 	 * Create the frame.

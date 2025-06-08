@@ -3,6 +3,7 @@ package Modelo;
 public class Empleados {
 	private int idEmpleado, telefono;
 	private String nombre, apellido;
+
 	public int getIdEmpleado() {
 		return idEmpleado;
 	}
