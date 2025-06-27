@@ -43,11 +43,13 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
     private GUITablaEmpleados tablaEmpleados;
     private GUIDetalleVenta detalleVenta;
     private GUITablaDetalleVenta tablaDetalleVenta;
+    private GUIDetalleCompra detalleCompra;
 	private JMenuItem mntmNewMenuItem_2;
 	private JMenuItem mntmNewMenuItem_3;
 	private JMenuItem mntmNewMenuItem_4;
 	private JMenuItem mntmNewMenuItem_5;
 	private JLabel lblNewLabel;
+	private JMenuItem mntmNewMenuItem_6;
 
 	/**
 	 * Launch the application.
@@ -109,6 +111,11 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 					mntmNewMenuItem_5.addActionListener(this);
 					mnNewMenu.add(mntmNewMenuItem_5);
 				}
+				{
+					mntmNewMenuItem_6 = new JMenuItem("Compra");
+					mntmNewMenuItem_6.addActionListener(this);
+					mnNewMenu.add(mntmNewMenuItem_6);
+				}
 			}
 			{
 				mnNewMenu_1 = new JMenu("Tablas");
@@ -152,6 +159,9 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 
 
 	public void actionPerformed(ActionEvent e) {
+		if (e.getSource() == mntmNewMenuItem_6) {
+			do_mntmNewMenuItem_6_actionPerformed(e);
+		}
 		if (e.getSource() == mntmNewMenuItem_3) {
 			do_mntmNewMenuItem_3_actionPerformed(e);
 		}
@@ -271,6 +281,22 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 	    } else {
 	        try {
 	            tablaDetalleVenta.setSelected(true);        // Enfocar si ya está creado
+	        } catch (java.beans.PropertyVetoException ex) {
+	            ex.printStackTrace();
+	        }
+	    }
+	}
+	//menuItem que abriria la GUIDetalleCompra en la ventana Principal
+	protected void do_mntmNewMenuItem_6_actionPerformed(ActionEvent e) {
+		if (detalleCompra == null || detalleCompra.isClosed()) {
+	        cerrarInternalFrames();
+	        detalleCompra = new GUIDetalleCompra();
+	        desktopPane.add(detalleCompra);
+	        centrarInternalFrame(detalleCompra);
+	        detalleCompra.setVisible(true);
+	    } else {
+	        try {
+	            detalleCompra.setSelected(true);
 	        } catch (java.beans.PropertyVetoException ex) {
 	            ex.printStackTrace();
 	        }
