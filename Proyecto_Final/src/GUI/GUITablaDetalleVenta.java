@@ -26,7 +26,7 @@ public class GUITablaDetalleVenta extends JInternalFrame implements ActionListen
 	private JButton btnEditar;
 	private JButton btnEliminar;
 	private JButton btnActualizar;
-	private JTable table;
+	private JTable table; 
 	private DetalleVentaControlador controlador;
 
 	/**

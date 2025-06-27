@@ -40,7 +40,7 @@ public class GUILogin extends JDialog implements ActionListener {
     }
 	public Empleados getUsuarioActual() {
 	    return usuarioActual;
-	}
+	} 
 	/**
 	 * Create the dialog.
 	 */
