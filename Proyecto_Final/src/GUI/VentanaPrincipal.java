@@ -83,6 +83,7 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 	 */
 	
 	public VentanaPrincipal() {
+		setTitle("Interfaz Principal");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		controlador = new ProductoControlador();
 		controladorEmpleado = new EmpleadoControlador();

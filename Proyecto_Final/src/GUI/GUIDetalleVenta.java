@@ -14,6 +14,7 @@ import java.awt.event.ActionEvent;
 import Modelo.DetalleVenta;
 import controlador.DetalleVentaControlador;
 import java.sql.Date;
+import java.time.LocalDate;
 
 public class GUIDetalleVenta extends JInternalFrame implements ActionListener {
 
@@ -54,6 +55,7 @@ public class GUIDetalleVenta extends JInternalFrame implements ActionListener {
 	 * Create the frame.
 	 */
 	public GUIDetalleVenta() {
+		setTitle("Ventana de venta");
 		setBounds(100, 100, 539, 342);
 		getContentPane().setLayout(new GridLayout(0, 2, 0, 0));
 		{
@@ -77,6 +79,12 @@ public class GUIDetalleVenta extends JInternalFrame implements ActionListener {
 			txtIdProducto.setFont(new Font("Tahoma", Font.PLAIN, 14));
 			getContentPane().add(txtIdProducto);
 			txtIdProducto.setColumns(10);
+			txtIdProducto.addFocusListener(new java.awt.event.FocusAdapter() {
+			    @Override
+			    public void focusLost(java.awt.event.FocusEvent e) {
+			        autocompletarPrecio();
+			    }
+			});
 		}
 		{
 			lblNewLabel_2 = new JLabel("idEmpleado:");
@@ -121,6 +129,8 @@ public class GUIDetalleVenta extends JInternalFrame implements ActionListener {
 			txtFecha.setFont(new Font("Tahoma", Font.PLAIN, 14));
 			getContentPane().add(txtFecha);
 			txtFecha.setColumns(10);
+			txtFecha.setText(String.valueOf(LocalDate.now()));
+			txtFecha.setEditable(false);
 		}
 		{
 			btnAgregar = new JButton("Agregar");
@@ -146,10 +156,10 @@ public class GUIDetalleVenta extends JInternalFrame implements ActionListener {
 		}
 	}
 	protected void do_btnAgregar_actionPerformed(ActionEvent e) {
-		try {
-	        // Validar campos vacíos
-	        if (txtIdDetalle.getText().isEmpty() || txtIdProducto.getText().isEmpty() || txtIdEmpleado.getText().isEmpty()
-	                || txtCantidad.getText().isEmpty() || txtPrecioUnitario.getText().isEmpty() || txtFecha.getText().isEmpty()) {
+	    try {
+	        if (txtIdDetalle.getText().isEmpty() || txtIdProducto.getText().isEmpty()
+	                || txtIdEmpleado.getText().isEmpty() || txtCantidad.getText().isEmpty()
+	                || txtPrecioUnitario.getText().isEmpty()) {
 	            JOptionPane.showMessageDialog(this, "Por favor, completa todos los campos.", "Campos vacíos", JOptionPane.WARNING_MESSAGE);
 	            return;
 	        }
@@ -159,23 +169,24 @@ public class GUIDetalleVenta extends JInternalFrame implements ActionListener {
 	        int idEmpleado = Integer.parseInt(txtIdEmpleado.getText());
 	        int cantidad = Integer.parseInt(txtCantidad.getText());
 	        double precio = Double.parseDouble(txtPrecioUnitario.getText());
-	        
-	        if (!controlador.existeProducto(idProducto)) {
-                JOptionPane.showMessageDialog(this, "Error: El ID de producto no existe.");
-                return;
-            }
 
-            if (!controlador.existeEmpleado(idEmpleado)) {
-                JOptionPane.showMessageDialog(this, "Error: El ID de empleado no existe.");
-                return;
-            }
-	        // Validar valores negativos
+	        if (!controlador.existeProducto(idProducto)) {
+	            JOptionPane.showMessageDialog(this, "Error: El ID de producto no existe.");
+	            return;
+	        }
+
+	        if (!controlador.existeEmpleado(idEmpleado)) {
+	            JOptionPane.showMessageDialog(this, "Error: El ID de empleado no existe.");
+	            return;
+	        }
+
 	        if (idDetalle < 0 || idProducto < 0 || idEmpleado < 0 || cantidad < 0 || precio < 0) {
 	            JOptionPane.showMessageDialog(this, "No se permiten valores negativos.", "Valor inválido", JOptionPane.WARNING_MESSAGE);
 	            return;
 	        }
 
-	        Date fecha = Date.valueOf(txtFecha.getText()); // formato yyyy-MM-dd
+	        // Asignar fecha actual
+	        Date fecha = new Date(System.currentTimeMillis());
 
 	        DetalleVenta detalle = new DetalleVenta();
 	        detalle.setIdDetalle(idDetalle);
@@ -185,14 +196,10 @@ public class GUIDetalleVenta extends JInternalFrame implements ActionListener {
 	        detalle.setPrecioUnitario(precio);
 	        detalle.setFechaVenta(fecha);
 
-	        DetalleVentaControlador controlador = new DetalleVentaControlador();
 	        controlador.agregarDetalle(detalle);
-
 	        limpiarCampos();
 	    } catch (NumberFormatException ex) {
 	        JOptionPane.showMessageDialog(this, "Verifica que los campos numéricos (ID, cantidad, precio) sean válidos.", "Error de formato", JOptionPane.ERROR_MESSAGE);
-	    } catch (IllegalArgumentException ex) {
-	        JOptionPane.showMessageDialog(this, "La fecha debe tener el formato yyyy-MM-dd.", "Error de fecha", JOptionPane.ERROR_MESSAGE);
 	    } catch (Exception ex) {
 	        JOptionPane.showMessageDialog(this, "Error inesperado: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 	        ex.printStackTrace();
@@ -209,4 +216,16 @@ public class GUIDetalleVenta extends JInternalFrame implements ActionListener {
         txtPrecioUnitario.setText("");
         txtFecha.setText("");
     }
+	private void autocompletarPrecio() {
+	    try {
+	        int idProducto = Integer.parseInt(txtIdProducto.getText());
+	        double precio = controlador.obtenerPrecioProducto(idProducto);  // Este método va en tu controlador
+	        txtPrecioUnitario.setText(String.valueOf(precio));
+	    } catch (NumberFormatException ex) {
+	        JOptionPane.showMessageDialog(this, "El ID del producto debe ser numérico.");
+	    } catch (Exception ex) {
+	        JOptionPane.showMessageDialog(this, "Error al obtener el precio: " + ex.getMessage());
+	    }
+	}
+	
 }

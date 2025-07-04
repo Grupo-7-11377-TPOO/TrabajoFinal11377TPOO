@@ -41,6 +41,7 @@ public class GUIProovedores extends JInternalFrame implements ActionListener {
 	 * Create the frame.
 	 */
 	public GUIProovedores(ProovedorControlador controlador) {
+		setTitle("Ventana de proovedores");
 		this.controlador = controlador;
 		setBounds(100, 100, 539, 342);
 		

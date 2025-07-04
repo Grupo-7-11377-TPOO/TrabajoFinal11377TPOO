@@ -52,7 +52,7 @@ public class GUIEmpleados extends JInternalFrame implements ActionListener {
 	 */
 	public GUIEmpleados(EmpleadoControlador controlador) {
 		this.controlador = controlador;
-		setTitle("Ventana de Empleados");
+		setTitle("Ventana de ingreso de empleados");
 		setBounds(100, 100, 539, 342);
 		getContentPane().setLayout(new GridLayout(0, 2, 0, 0));
 		{

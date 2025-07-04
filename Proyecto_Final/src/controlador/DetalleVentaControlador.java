@@ -172,5 +172,18 @@ public class DetalleVentaControlador {
         }
         return false;
     }
-
+    public double obtenerPrecioProducto(int idProducto) throws SQLException {
+        String sql = "SELECT Precio FROM Productos WHERE idProducto = ?";
+        try (Connection conn = ConexionBD.getConexion();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, idProducto);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getDouble("Precio");
+                } else {
+                    throw new SQLException("Producto no encontrado.");
+                }
+            }
+        }
+    }
 }

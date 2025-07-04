@@ -46,7 +46,7 @@ public class GUILogin extends JDialog implements ActionListener {
 	 */
 	public GUILogin(java.awt.Frame parent, boolean modal) {
 		super(parent, modal);
-		setTitle("Usuario");
+		setTitle("Ventana de Loguin");
 		setBounds(100, 100, 410, 237);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
