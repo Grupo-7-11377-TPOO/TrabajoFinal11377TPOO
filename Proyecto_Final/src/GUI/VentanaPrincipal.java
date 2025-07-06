@@ -90,7 +90,6 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 		controladorDetalle = new DetalleVentaControlador();
 		setBounds(100, 100, 555, 480);
 		{
-			
 			menuBar = new JMenuBar();
 			setJMenuBar(menuBar);
 			{
@@ -117,7 +116,7 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 					mntmNewMenuItem_6.addActionListener(this);
 					mnNewMenu.add(mntmNewMenuItem_6);
 				}
-			}
+			} 
 			{
 				mnNewMenu_1 = new JMenu("Tablas");
 				mnNewMenu_1.addActionListener(this);
