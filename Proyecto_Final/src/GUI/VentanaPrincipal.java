@@ -88,7 +88,7 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 		controlador = new ProductoControlador();
 		controladorEmpleado = new EmpleadoControlador();
 		controladorDetalle = new DetalleVentaControlador();
-		setBounds(100, 100, 555, 403);
+		setBounds(100, 100, 555, 480);
 		{
 			
 			menuBar = new JMenuBar();
@@ -146,13 +146,13 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 		contentPane.setLayout(null);
 		{
 			desktopPane = new JDesktopPane();
-			desktopPane.setBounds(0, 0, 539, 342);
+			desktopPane.setBounds(0, 0, 539, 419);
 			contentPane.add(desktopPane);
 			desktopPane.setLayout(null);
 			{
 				lblNewLabel = new JLabel("NEGOCIO DE LICORES");
 				lblNewLabel.setFont(new Font("Nirmala Text", Font.BOLD, 40));
-				lblNewLabel.setBounds(62, 140, 420, 87);
+				lblNewLabel.setBounds(58, 182, 420, 87);
 				desktopPane.add(lblNewLabel);
 			}
 		}
@@ -259,7 +259,7 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 	protected void do_mntmNewMenuItem_2_actionPerformed(ActionEvent e) {
 		if (detalleVenta == null || detalleVenta.isClosed()) {
 	        cerrarInternalFrames();
-	        detalleVenta = new GUIDetalleVenta(); // Crear nueva instancia
+	        detalleVenta = new GUIDetalleVenta(controlador, controladorEmpleado); // Crear nueva instancia
 	        desktopPane.add(detalleVenta);       // Añadir al escritorio
 	        centrarInternalFrame(detalleVenta);  // Centrarlo
 	        detalleVenta.setVisible(true);       // Mostrarlo

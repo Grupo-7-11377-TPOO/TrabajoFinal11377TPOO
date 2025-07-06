@@ -7,14 +7,24 @@ import java.awt.GridLayout;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.JButton;
 import java.awt.Font;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import Modelo.DetalleVenta;
+import Modelo.Empleados;
+import Modelo.Producto;
 import controlador.DetalleVentaControlador;
+import controlador.EmpleadoControlador;
+import controlador.ProductoControlador;
+
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.List;
+
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 
 public class GUIDetalleVenta extends JInternalFrame implements ActionListener {
 
@@ -34,6 +44,12 @@ public class GUIDetalleVenta extends JInternalFrame implements ActionListener {
 	private JLabel lblNewLabel_5;
 	private JTextField txtFecha;
 	private DetalleVentaControlador controlador = new DetalleVentaControlador();
+	private ProductoControlador controlador1;
+	private EmpleadoControlador controlador2;
+	private JScrollPane tableProductos;
+	private JScrollPane tableEmpleados;
+	private JTable table;
+	private JTable table_1;
 
 	/**
 	 * Launch the application.
@@ -42,7 +58,7 @@ public class GUIDetalleVenta extends JInternalFrame implements ActionListener {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					GUIDetalleVenta frame = new GUIDetalleVenta();
+					GUIDetalleVenta frame = new GUIDetalleVenta(new ProductoControlador(), new EmpleadoControlador());
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -54,9 +70,11 @@ public class GUIDetalleVenta extends JInternalFrame implements ActionListener {
 	/**
 	 * Create the frame.
 	 */
-	public GUIDetalleVenta() {
+	public GUIDetalleVenta(ProductoControlador controlador, EmpleadoControlador controlador2) {
+		this.controlador1 = controlador;
+		this.controlador2 = controlador2;
 		setTitle("Ventana de venta");
-		setBounds(100, 100, 539, 342);
+		setBounds(100, 100, 539, 440);
 		getContentPane().setLayout(new GridLayout(0, 2, 0, 0));
 		{
 			lblNewLabel = new JLabel("idVenta:");
@@ -135,6 +153,24 @@ public class GUIDetalleVenta extends JInternalFrame implements ActionListener {
 		{
 			btnAgregar = new JButton("Agregar");
 			btnAgregar.addActionListener(this);
+			{
+				tableProductos = new JScrollPane();
+				getContentPane().add(tableProductos);
+				{
+					table = new JTable();
+					tableProductos.setViewportView(table);
+				}
+				cargarDatosEnTabla();
+			}
+			{
+				tableEmpleados = new JScrollPane();
+				getContentPane().add(tableEmpleados);
+				{
+					table_1 = new JTable();
+					tableEmpleados.setViewportView(table_1);
+				}
+				cargarDatosEnTabla2();
+			}
 			btnAgregar.setFont(new Font("Tahoma", Font.BOLD, 14));
 			getContentPane().add(btnAgregar);
 		}
@@ -222,10 +258,35 @@ public class GUIDetalleVenta extends JInternalFrame implements ActionListener {
 	        double precio = controlador.obtenerPrecioProducto(idProducto);  // Este método va en tu controlador
 	        txtPrecioUnitario.setText(String.valueOf(precio));
 	    } catch (NumberFormatException ex) {
-	        JOptionPane.showMessageDialog(this, "El ID del producto debe ser numérico.");
+	        //JOptionPane.showMessageDialog(this, "El ID del producto debe ser numérico.");
 	    } catch (Exception ex) {
 	        JOptionPane.showMessageDialog(this, "Error al obtener el precio: " + ex.getMessage());
 	    }
 	}
-	
+	private void cargarDatosEnTabla() {
+		List<Producto> productos = controlador1.listarProductos();
+
+		String[] columnas = { "ID", "Nombre"};
+		DefaultTableModel modelo = new DefaultTableModel(columnas, 0);
+
+		for (Producto p : productos) {
+			Object[] fila = { p.getCodigo(), p.getNombre()};
+			modelo.addRow(fila); 
+		}
+
+		table.setModel(modelo);
+	}
+	private void cargarDatosEnTabla2() {
+		List<Empleados> empleados = controlador2.listarEmpleados();
+
+		String[] columnas = { "ID", "Nombre"};
+		DefaultTableModel modelo = new DefaultTableModel(columnas, 0);
+
+		for (Empleados e : empleados) {
+			Object[] fila = { e.getIdEmpleado(), e.getNombre()};
+			modelo.addRow(fila); 
+		}
+
+		table_1.setModel(modelo);
+	}
 }
