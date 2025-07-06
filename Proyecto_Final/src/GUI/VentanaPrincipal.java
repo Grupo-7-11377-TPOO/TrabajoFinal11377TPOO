@@ -80,7 +80,7 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 
 	/**
 	 * Create the frame.
-	 */
+	 */ 
 	
 	public VentanaPrincipal() {
 		setTitle("Interfaz Principal");
