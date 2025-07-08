@@ -51,17 +51,16 @@ public class DetalleVentaControlador {
             return;
         }
 
-        String sql = "INSERT INTO DetalleVenta (idDetalle, idProducto, idEmpleado, cantidad, precio_unitario, fecha_venta) VALUES (?, ?, ?, ?, ?, ?)";
-
+        String sql = "INSERT INTO DetalleVenta (idProducto, idEmpleado, cantidad, precio_unitario, fecha_venta) VALUES (?, ?, ?, ?, ?)";
+        
         try (Connection conn = ConexionBD.getConexion();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            stmt.setInt(1, detalle.getIdDetalle());
-            stmt.setInt(2, detalle.getIdProducto());
-            stmt.setInt(3, detalle.getIdEmpleado());
-            stmt.setInt(4, detalle.getCantidad());
-            stmt.setDouble(5, detalle.getPrecioUnitario());
-            stmt.setDate(6, detalle.getFechaVenta());
+        	stmt.setInt(1, detalle.getIdProducto());
+        	stmt.setInt(2, detalle.getIdEmpleado());
+        	stmt.setInt(3, detalle.getCantidad());
+        	stmt.setDouble(4, detalle.getPrecioUnitario());
+        	stmt.setDate(5, detalle.getFechaVenta());
 
             stmt.executeUpdate();
             JOptionPane.showMessageDialog(null, "Detalle de venta agregado y stock actualizado correctamente.");

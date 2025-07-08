@@ -83,6 +83,8 @@ public class GUIDetalleVenta extends JInternalFrame implements ActionListener {
 		}
 		{
 			txtIdDetalle = new JTextField();
+			txtIdDetalle.setEditable(false);
+			txtIdDetalle.setText("Se auto incrementa");
 			txtIdDetalle.setFont(new Font("Tahoma", Font.PLAIN, 14));
 			getContentPane().add(txtIdDetalle);
 			txtIdDetalle.setColumns(10);
@@ -200,7 +202,6 @@ public class GUIDetalleVenta extends JInternalFrame implements ActionListener {
 	            return;
 	        }
 
-	        int idDetalle = Integer.parseInt(txtIdDetalle.getText());
 	        int idProducto = Integer.parseInt(txtIdProducto.getText());
 	        int idEmpleado = Integer.parseInt(txtIdEmpleado.getText());
 	        int cantidad = Integer.parseInt(txtCantidad.getText());
@@ -216,7 +217,7 @@ public class GUIDetalleVenta extends JInternalFrame implements ActionListener {
 	            return;
 	        }
 
-	        if (idDetalle < 0 || idProducto < 0 || idEmpleado < 0 || cantidad < 0 || precio < 0) {
+	        if (idProducto < 0 || idEmpleado < 0 || cantidad < 0 || precio < 0) {
 	            JOptionPane.showMessageDialog(this, "No se permiten valores negativos.", "Valor inválido", JOptionPane.WARNING_MESSAGE);
 	            return;
 	        }
@@ -225,7 +226,6 @@ public class GUIDetalleVenta extends JInternalFrame implements ActionListener {
 	        Date fecha = new Date(System.currentTimeMillis());
 
 	        DetalleVenta detalle = new DetalleVenta();
-	        detalle.setIdDetalle(idDetalle);
 	        detalle.setIdProducto(idProducto);
 	        detalle.setIdEmpleado(idEmpleado);
 	        detalle.setCantidad(cantidad);
@@ -245,7 +245,6 @@ public class GUIDetalleVenta extends JInternalFrame implements ActionListener {
 		dispose();
 	}
 	private void limpiarCampos() {
-        txtIdDetalle.setText("");
         txtIdProducto.setText("");
         txtIdEmpleado.setText("");
         txtCantidad.setText("");
