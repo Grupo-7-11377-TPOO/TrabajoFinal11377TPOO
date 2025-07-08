@@ -74,7 +74,7 @@ public class GUIDetalleVenta extends JInternalFrame implements ActionListener {
 		this.controlador1 = controlador;
 		this.controlador2 = controlador2;
 		setTitle("Ventana de venta");
-		setBounds(100, 100, 539, 440);
+		setBounds(100, 100, 539, 430);
 		getContentPane().setLayout(new GridLayout(0, 2, 0, 0));
 		{
 			lblNewLabel = new JLabel("idVenta:");

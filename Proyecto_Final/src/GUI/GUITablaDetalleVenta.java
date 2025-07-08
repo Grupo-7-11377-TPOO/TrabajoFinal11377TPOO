@@ -52,7 +52,7 @@ public class GUITablaDetalleVenta extends JInternalFrame implements ActionListen
 	public GUITablaDetalleVenta(DetalleVentaControlador controlador) {
 		this.controlador = controlador;
 		setTitle("Historial de ventas");
-		setBounds(100, 100, 539, 342);
+		setBounds(100, 100, 539, 430);
 		getContentPane().setLayout(new BorderLayout(0, 0));
 		{
 			panel = new JPanel();

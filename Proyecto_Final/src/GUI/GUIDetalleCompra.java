@@ -42,7 +42,7 @@ public class GUIDetalleCompra extends JInternalFrame implements ActionListener {
 	public GUIDetalleCompra() {
 		setTitle("Ventana de reabastecimiento de inventario");
 		this.controlador = new DetalleCompraControlador();
-		setBounds(100, 100, 539, 342);
+		setBounds(100, 100, 539, 430);
 		
 		JPanel panel = new JPanel();
 		getContentPane().add(panel, BorderLayout.SOUTH);

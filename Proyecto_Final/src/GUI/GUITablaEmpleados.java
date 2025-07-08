@@ -50,7 +50,7 @@ public class GUITablaEmpleados extends JInternalFrame implements ActionListener 
 	public GUITablaEmpleados(EmpleadoControlador controlador) {
 		this.controlador = controlador;
 		setTitle("Informacion de empleados");
-		setBounds(100, 100, 539, 342);
+		setBounds(100, 100, 539, 430);
 		{
 			panel = new JPanel();
 			getContentPane().add(panel, BorderLayout.SOUTH);

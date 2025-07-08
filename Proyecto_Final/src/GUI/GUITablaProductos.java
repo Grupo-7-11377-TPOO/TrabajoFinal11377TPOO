@@ -51,7 +51,7 @@ public class GUITablaProductos extends JInternalFrame implements ActionListener 
 	public GUITablaProductos(ProductoControlador controlador) {
 		this.controlador = controlador;
 		setTitle("Inventario disponible");
-		setBounds(100, 100, 539, 342);
+		setBounds(100, 100, 539, 430);
 		getContentPane().setLayout(new BorderLayout(0, 0));
 		{
 			panel = new JPanel();

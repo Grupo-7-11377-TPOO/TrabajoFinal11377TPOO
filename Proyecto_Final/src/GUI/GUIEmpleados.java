@@ -53,7 +53,7 @@ public class GUIEmpleados extends JInternalFrame implements ActionListener {
 	public GUIEmpleados(EmpleadoControlador controlador) {
 		this.controlador = controlador;
 		setTitle("Ventana de ingreso de empleados");
-		setBounds(100, 100, 539, 342);
+		setBounds(100, 100, 539, 430);
 		getContentPane().setLayout(new GridLayout(0, 2, 0, 0));
 		{
 			lblNewLabel = new JLabel("Id Empleado:");

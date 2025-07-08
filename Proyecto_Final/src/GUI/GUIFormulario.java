@@ -58,7 +58,7 @@ public class GUIFormulario extends JInternalFrame implements ActionListener {
 	public GUIFormulario(ProductoControlador controlador) {
 		this.controlador = controlador;
 		setTitle("Ventana de ingreso de productos a inventario");
-		setBounds(100, 100, 539, 342);
+		setBounds(100, 100, 539, 430);
 		{
 			getContentPane().setLayout(new GridLayout(0, 2, 0, 0));
 			{
