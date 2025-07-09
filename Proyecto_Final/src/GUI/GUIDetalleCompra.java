@@ -26,6 +26,9 @@ public class GUIDetalleCompra extends JInternalFrame implements ActionListener {
 	private final JDesktopPane desktopPane_1 = new JDesktopPane();
 	private JScrollPane scrollPane_1;
 	private JTable table_1;
+	private JLabel lblNewLabel;
+	private JComboBox cmbFECHAS;
+	private JTextField txtresultadoCompra;
 	/**
 	 * Launch the application.
 	 */
@@ -56,7 +59,7 @@ public class GUIDetalleCompra extends JInternalFrame implements ActionListener {
 		panel.setBounds(0, 356, 523, 33);
 		getContentPane().add(panel);
 		
-		btnAgregarCompra = new JButton("Agregar Compra");
+		btnAgregarCompra = new JButton("Añadir");
 		btnAgregarCompra.addActionListener(this);
 		panel.add(btnAgregarCompra);
 		
@@ -67,6 +70,30 @@ public class GUIDetalleCompra extends JInternalFrame implements ActionListener {
 		btnListaProovedores = new JButton("Lista Proovedores");
 		btnListaProovedores.addActionListener(this);
 		panel.add(btnListaProovedores);
+		{
+			lblNewLabel = new JLabel("Total");
+			panel.add(lblNewLabel);
+		}
+		{
+			cmbFECHAS = new JComboBox();
+			cmbFECHAS.setModel(new DefaultComboBoxModel(new String[] {"Mensual:", "Anual:"}));
+			panel.add(cmbFECHAS);
+			cmbFECHAS.addItemListener(new ItemListener() {
+				public void itemStateChanged(ItemEvent e) {
+					if (e.getStateChange() == ItemEvent.SELECTED) {
+						calcularTotalCompra();
+					}
+				}
+			});
+		}
+		
+		{
+			txtresultadoCompra = new JTextField();
+			txtresultadoCompra.setText("-Resultado-");
+			txtresultadoCompra.setEditable(false);
+			panel.add(txtresultadoCompra);
+			txtresultadoCompra.setColumns(10);
+		}
 		
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(0, 0, 533, 222);
@@ -99,6 +126,7 @@ public class GUIDetalleCompra extends JInternalFrame implements ActionListener {
 		if (e.getSource() == btnAgregarCompra) {
 			do_btnAgregarCompra_actionPerformed(e);
 		}
+		
 	}
 	private void cargarTabla() {
 		List<DetalleCompra> lista = controlador.listarDetalleCompras();
@@ -131,6 +159,36 @@ public class GUIDetalleCompra extends JInternalFrame implements ActionListener {
 
 		table_1.setModel(modelo);
 	}
+	private void calcularTotalCompra() {
+		String opcion = cmbFECHAS.getSelectedItem().toString();
+		double total = 0;
+
+		try {
+			if (opcion.equals("Mensual:")) {
+				String mesStr = JOptionPane.showInputDialog(this, "Ingrese el número del mes (1-12):");
+				if (mesStr == null || !mesStr.matches("\\d+")) return;
+				int mes = Integer.parseInt(mesStr);
+
+				if (mes < 1 || mes > 12) {
+					JOptionPane.showMessageDialog(this, "Mes inválido.");
+					return;
+				}
+
+				total = controlador.obtenerTotalComprasPorFecha("MES", mes);
+
+			} else if (opcion.equals("Anual:")) {
+				String anioStr = JOptionPane.showInputDialog(this, "Ingrese el año:");
+				if (anioStr == null || !anioStr.matches("\\d+")) return;
+				int anio = Integer.parseInt(anioStr);
+				total = controlador.obtenerTotalComprasPorFecha("ANIO", anio);
+			}
+
+			txtresultadoCompra.setText(String.format("S/ %.2f", total));
+		} catch (Exception ex) {
+			JOptionPane.showMessageDialog(this, "Error al calcular el total: " + ex.getMessage());
+		}
+	}
+
 	protected void do_btnAgregarCompra_actionPerformed(ActionEvent e) {
 		try {
 			String idProductoStr = JOptionPane.showInputDialog(this, "ID Producto:");

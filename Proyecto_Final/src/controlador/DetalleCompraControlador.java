@@ -211,4 +211,27 @@ public class DetalleCompraControlador {
             e.printStackTrace();
         }
     }
+    public double obtenerTotalComprasPorFecha(String tipo, int valor) {
+    	String sql = "";
+    	if (tipo.equals("MES")) {
+    		sql = "SELECT SUM(cantidad * precio_compra) AS total FROM DetalleCompra WHERE MONTH(fecha_compra) = ?";
+    	} else if (tipo.equals("ANIO")) {
+    		sql = "SELECT SUM(cantidad * precio_compra) AS total FROM DetalleCompra WHERE YEAR(fecha_compra) = ?";
+    	} else {
+    		return 0;
+    	}
+
+    	try (Connection conn = ConexionBD.getConexion();
+    	     PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+    		stmt.setInt(1, valor);
+    		ResultSet rs = stmt.executeQuery();
+    		if (rs.next()) {
+    			return rs.getDouble("total");
+    		}
+    	} catch (SQLException e) {
+    		e.printStackTrace();
+    	}
+    	return 0;
+    }
 }
