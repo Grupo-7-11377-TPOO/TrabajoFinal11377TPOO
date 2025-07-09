@@ -179,7 +179,7 @@ public class GUITablaDetalleVenta extends JInternalFrame implements ActionListen
 	            break;
 	    }
 
-	    txtresultadoventatotal.setText(String.format("%.2f", total));
+	    txtresultadoventatotal.setText(String.format("S/ %.2f", total));
 	}
 	protected void do_btnEditar_actionPerformed(ActionEvent e) {
 		int fila = table.getSelectedRow();

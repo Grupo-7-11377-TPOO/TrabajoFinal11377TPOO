@@ -214,9 +214,9 @@ public class DetalleCompraControlador {
     public double obtenerTotalComprasPorFecha(String tipo, int valor) {
     	String sql = "";
     	if (tipo.equals("MES")) {
-    		sql = "SELECT SUM(cantidad * precio_compra) AS total FROM DetalleCompra WHERE MONTH(fecha_compra) = ?";
+    		sql = "SELECT SUM(PrecioCompra) AS total FROM DetalleCompra WHERE MONTH(fecha_compra) = ?";
     	} else if (tipo.equals("ANIO")) {
-    		sql = "SELECT SUM(cantidad * precio_compra) AS total FROM DetalleCompra WHERE YEAR(fecha_compra) = ?";
+    		sql = "SELECT SUM(PrecioCompra) AS total FROM DetalleCompra WHERE YEAR(fecha_compra) = ?";
     	} else {
     		return 0;
     	}
