@@ -67,7 +67,33 @@ public class DetalleCompraControlador {
     }
 
     public void actualizarDetalleCompra(DetalleCompra detalle) {
-        String sql = "UPDATE DetalleCompra SET idProducto = ?, idProovedor = ?, Cantidad = ?, PrecioCompra = ?, fecha_compra = ? WHERE idDetalle = ?";
+    	if (!existeProducto(detalle.getIdProducto())) {
+            JOptionPane.showMessageDialog(null, "Error: El producto con ID " + detalle.getIdProducto() + " no existe.");
+            return;
+        }
+        if (!existeProovedor(detalle.getIdProovedor())) {
+            JOptionPane.showMessageDialog(null, "Error: El proveedor con ID " + detalle.getIdProovedor() + " no existe.");
+            return;
+        }
+    	DetalleCompra original = buscarPorId(detalle.getIdDetalle());
+
+        if (original == null) {
+            JOptionPane.showMessageDialog(null, "No se encontró el detalle original.");
+            return;
+        }
+        // Paso 2: Restar la cantidad anterior del stock
+        if (!ajustarStock(detalle.getIdProducto(), -original.getCantidad())) {
+            JOptionPane.showMessageDialog(null, "Error al restar stock anterior.");
+            return;
+        }
+
+        // Paso 3: Sumar la nueva cantidad al stock
+        if (!ajustarStock(detalle.getIdProducto(), detalle.getCantidad())) {
+            JOptionPane.showMessageDialog(null, "Error al actualizar stock con nueva cantidad.");
+            return;
+        }
+    	
+    	String sql = "UPDATE DetalleCompra SET idProducto = ?, idProovedor = ?, Cantidad = ?, PrecioCompra = ?, fecha_compra = ? WHERE idDetalle = ?";
 
         try (Connection conn = ConexionBD.getConexion();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -102,7 +128,7 @@ public class DetalleCompraControlador {
     }
 
     public boolean existeProovedor(int idProovedor) {
-        String sql = "SELECT 1 FROM Proovedores WHERE idProovedor = ?";
+        String sql = "SELECT 1 FROM Proovedor WHERE idProovedor = ?";
         try (Connection conn = ConexionBD.getConexion();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, idProovedor);
@@ -131,7 +157,24 @@ public class DetalleCompraControlador {
         }
         return false;
     }
+    
+    private boolean ajustarStock(int idProducto, int cantidad) {
+        String sql = "UPDATE Productos SET Stock = Stock + ? WHERE idProducto = ?";
 
+        try (Connection conn = ConexionBD.getConexion();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, cantidad);
+            stmt.setInt(2, idProducto);
+
+            int filasAfectadas = stmt.executeUpdate();
+            return filasAfectadas > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+    
     public DetalleCompra buscarPorId(int id) {
         String sql = "SELECT * FROM DetalleCompra WHERE idDetalle = ?";
         try (Connection conn = ConexionBD.getConexion();

@@ -139,21 +139,35 @@ public class GUIDetalleCompra extends JInternalFrame implements ActionListener {
 			String precioStr = JOptionPane.showInputDialog(this, "Precio de Compra:");
 
 			if (idProductoStr == null || idProovedorStr == null || cantidadStr == null || precioStr == null) return;
+			// Validación de números enteros positivos
+			if (!idProductoStr.matches("\\d+") || !idProovedorStr.matches("\\d+") || !cantidadStr.matches("\\d+")) {
+				JOptionPane.showMessageDialog(this, "ID Producto, ID Proveedor y Cantidad deben ser números enteros positivos.");
+				return;
+			}
 
+			// Validación de número decimal positivo
+			if (!precioStr.matches("^\\d+(\\.\\d+)?$")) {
+				JOptionPane.showMessageDialog(this, "El precio debe ser un número decimal positivo.");
+				return;
+			}
 			int idProducto = Integer.parseInt(idProductoStr);
 			int idProovedor = Integer.parseInt(idProovedorStr);
 			int cantidad = Integer.parseInt(cantidadStr);
 			double precio = Double.parseDouble(precioStr);
-
+			
+			if (cantidad <= 0 || precio <= 0) {
+				JOptionPane.showMessageDialog(this, "Cantidad y precio deben ser mayores que cero.");
+				return;
+			}
 			DetalleCompra d = new DetalleCompra();
 			d.setIdProducto(idProducto);
 			d.setIdProovedor(idProovedor);
 			d.setCantidad(cantidad);
 			d.setPrecioCompra(precio);
 			d.setFechaCompra(Date.valueOf(LocalDate.now()));
-
+			
 			controlador.agregarDetalleCompra(d);
-			JOptionPane.showMessageDialog(this, "Detalle de compra agregado.");
+			cargarDatosEnTabla();
 			cargarTabla();
 		} catch (Exception ex) {
 			JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage());
@@ -173,13 +187,30 @@ public class GUIDetalleCompra extends JInternalFrame implements ActionListener {
 				String precioStr = JOptionPane.showInputDialog(this, "Nuevo Precio:", table.getValueAt(fila, 4));
 
 				if (idProductoStr == null || idProovedorStr == null || cantidadStr == null || precioStr == null) return;
-
-				d.setIdProducto(Integer.parseInt(idProductoStr));
-				d.setIdProovedor(Integer.parseInt(idProovedorStr));
-				d.setCantidad(Integer.parseInt(cantidadStr));
-				d.setPrecioCompra(Double.parseDouble(precioStr));
+				// Validación de números enteros positivos
+				if (!idProductoStr.matches("\\d+") || !idProovedorStr.matches("\\d+") || !cantidadStr.matches("\\d+")) {
+					JOptionPane.showMessageDialog(this, "ID Producto, ID Proveedor y Cantidad deben ser números enteros positivos.");
+					return;
+				}
+				// Validación de número decimal positivo
+				if (!precioStr.matches("^\\d+(\\.\\d+)?$")) {
+					JOptionPane.showMessageDialog(this, "El precio debe ser un número decimal positivo.");
+					return;
+				}
+				int idProducto = Integer.parseInt(idProductoStr);
+				int idProovedor = Integer.parseInt(idProovedorStr);
+				int cantidad = Integer.parseInt(cantidadStr);
+				double precio = Double.parseDouble(precioStr);
+				if (cantidad <= 0 || precio <= 0) {
+					JOptionPane.showMessageDialog(this, "Cantidad y precio deben ser mayores que cero.");
+					return;
+				}
+				d.setIdProducto(idProducto);
+				d.setIdProovedor(idProovedor);
+				d.setCantidad(cantidad);
+				d.setPrecioCompra(precio);
 				d.setFechaCompra(Date.valueOf(LocalDate.now())); // actualiza con la fecha actual
-
+				
 				controlador.actualizarDetalleCompra(d);
 				JOptionPane.showMessageDialog(this, "Detalle actualizado correctamente.");
 				cargarTabla();

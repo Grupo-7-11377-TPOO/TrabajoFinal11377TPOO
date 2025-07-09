@@ -86,7 +86,35 @@ public class DetalleVentaControlador {
     }
 
     public void actualizarDetalle(DetalleVenta detalle) {
-    	
+    	if (!existeProducto(detalle.getIdProducto())) {
+            JOptionPane.showMessageDialog(null, "Error: El producto con ID " + detalle.getIdProducto() + " no existe.");
+            return;
+        }
+        if (!existeEmpleado(detalle.getIdEmpleado())) {
+            JOptionPane.showMessageDialog(null, "Error: El empleado con ID " + detalle.getIdEmpleado() + " no existe.");
+            return;
+        }
+    	// Paso 1: Obtener el detalle original antes de modificarlo
+        DetalleVenta original = buscarPorId(detalle.getIdDetalle());
+
+        if (original == null) {
+            JOptionPane.showMessageDialog(null, "No se encontró el detalle original.");
+            return;
+        }
+
+        // Paso 2: Revertir el stock con la cantidad anterior
+        if (!ajustarStock(detalle.getIdProducto(), original.getCantidad())) {
+            JOptionPane.showMessageDialog(null, "Error al restaurar stock anterior.");
+            return;
+        }
+
+        // Paso 3: Verificar si hay stock suficiente para nueva cantidad
+        if (!descontarStock(detalle.getIdProducto(), detalle.getCantidad())) {
+            // Si falla, devolver el stock original para no perder inventario
+            ajustarStock(detalle.getIdProducto(), -original.getCantidad());
+            JOptionPane.showMessageDialog(null, "Error: Stock insuficiente para el nuevo valor.");
+            return;
+        }
     	String sql = "UPDATE DetalleVenta SET idProducto = ?, idEmpleado = ?, cantidad = ?, precio_unitario = ?, fecha_venta = ? WHERE idDetalle = ?";
 
         try (Connection conn = ConexionBD.getConexion();
@@ -184,5 +212,20 @@ public class DetalleVentaControlador {
                 }
             }
         }
+    }
+    private boolean ajustarStock(int idProducto, int cantidad) {
+        String sql = "UPDATE Productos SET Stock = Stock + ? WHERE idProducto = ?";
+
+        try (Connection conn = ConexionBD.getConexion();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, cantidad);
+            stmt.setInt(2, idProducto);
+
+            return stmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 }
