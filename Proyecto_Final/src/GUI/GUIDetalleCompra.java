@@ -4,7 +4,9 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
 import Modelo.DetalleCompra;
+import Modelo.Producto;
 import controlador.DetalleCompraControlador;
+import controlador.ProductoControlador;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -20,6 +22,10 @@ public class GUIDetalleCompra extends JInternalFrame implements ActionListener {
 	private JButton btnEditarCompra;
 	private JButton btnListaProovedores;
 	private DetalleCompraControlador controlador;
+	private ProductoControlador controlador2;
+	private final JDesktopPane desktopPane_1 = new JDesktopPane();
+	private JScrollPane scrollPane_1;
+	private JTable table_1;
 	/**
 	 * Launch the application.
 	 */
@@ -42,10 +48,13 @@ public class GUIDetalleCompra extends JInternalFrame implements ActionListener {
 	public GUIDetalleCompra() {
 		setTitle("Ventana de reabastecimiento de inventario");
 		this.controlador = new DetalleCompraControlador();
-		setBounds(100, 100, 539, 430);
+		this.controlador2 = new ProductoControlador();
+		setBounds(100, 100, 539, 424);
+		getContentPane().setLayout(null);
 		
 		JPanel panel = new JPanel();
-		getContentPane().add(panel, BorderLayout.SOUTH);
+		panel.setBounds(0, 356, 523, 33);
+		getContentPane().add(panel);
 		
 		btnAgregarCompra = new JButton("Agregar Compra");
 		btnAgregarCompra.addActionListener(this);
@@ -60,11 +69,24 @@ public class GUIDetalleCompra extends JInternalFrame implements ActionListener {
 		panel.add(btnListaProovedores);
 		
 		JScrollPane scrollPane = new JScrollPane();
-		getContentPane().add(scrollPane, BorderLayout.CENTER);
+		scrollPane.setBounds(0, 0, 533, 222);
+		getContentPane().add(scrollPane);
 		
 		table = new JTable();
 		scrollPane.setViewportView(table);
+		desktopPane_1.setBounds(0, 221, 523, 139);
+		getContentPane().add(desktopPane_1);
+		{
+			scrollPane_1 = new JScrollPane();
+			scrollPane_1.setBounds(0, 0, 535, 137);
+			desktopPane_1.add(scrollPane_1);
+			{
+				table_1 = new JTable();
+				scrollPane_1.setViewportView(table_1);
+			}
+		}
 		cargarTabla();
+		cargarDatosEnTabla();
 	}
 
 	public void actionPerformed(ActionEvent e) {
@@ -95,6 +117,19 @@ public class GUIDetalleCompra extends JInternalFrame implements ActionListener {
 			modelo.addRow(fila);
 		}
 		table.setModel(modelo);
+	}
+	private void cargarDatosEnTabla() {
+		List<Producto> productos = controlador2.listarProductos();
+
+		String[] columnas = { "ID", "Nombre", "Precio" ,"Stock"};
+		DefaultTableModel modelo = new DefaultTableModel(columnas, 0);
+
+		for (Producto p : productos) {
+			Object[] fila = { p.getCodigo(), p.getNombre(), p.getPrecio(), p.getStock()};
+			modelo.addRow(fila); 
+		}
+
+		table_1.setModel(modelo);
 	}
 	protected void do_btnAgregarCompra_actionPerformed(ActionEvent e) {
 		try {
@@ -160,5 +195,11 @@ public class GUIDetalleCompra extends JInternalFrame implements ActionListener {
 		GUIProovedores ventana = new GUIProovedores(new controlador.ProovedorControlador());
 		getParent().add(ventana); // asegura que se agrega al mismo desktopPane
 		ventana.setVisible(true);
+		centrarInternalFrame(ventana);
+	}
+	private void centrarInternalFrame(JInternalFrame frame) {
+	    int x = (desktopPane_1.getWidth() - frame.getWidth()) / 2;
+	    int y = (desktopPane_1.getHeight() - frame.getHeight()) / 2;
+	    frame.setLocation(x, y);
 	}
 }

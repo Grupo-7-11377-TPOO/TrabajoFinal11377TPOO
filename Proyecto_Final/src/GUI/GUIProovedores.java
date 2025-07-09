@@ -43,7 +43,7 @@ public class GUIProovedores extends JInternalFrame implements ActionListener {
 	public GUIProovedores(ProovedorControlador controlador) {
 		setTitle("Ventana de proovedores");
 		this.controlador = controlador;
-		setBounds(100, 100, 539, 342);
+		setBounds(100, 100, 529, 133);
 		
 		JPanel panel = new JPanel();
 		getContentPane().add(panel, BorderLayout.SOUTH);
