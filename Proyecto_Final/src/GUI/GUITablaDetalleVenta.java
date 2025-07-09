@@ -17,6 +17,10 @@ import java.awt.event.ActionEvent;
 
 import controlador.DetalleVentaControlador;
 import Modelo.DetalleVenta;
+import javax.swing.JLabel;
+import javax.swing.JComboBox;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JTextField;
 
 public class GUITablaDetalleVenta extends JInternalFrame implements ActionListener {
 
@@ -28,6 +32,9 @@ public class GUITablaDetalleVenta extends JInternalFrame implements ActionListen
 	private JButton btnActualizar;
 	private JTable table; 
 	private DetalleVentaControlador controlador;
+	private JLabel lblNewLabel;
+	private JComboBox cmbFECHAS;
+	private JTextField txtresultadoventatotal;
 
 	/**
 	 * Launch the application.
@@ -72,6 +79,27 @@ public class GUITablaDetalleVenta extends JInternalFrame implements ActionListen
 				btnActualizar.addActionListener(this);
 				panel.add(btnActualizar);
 			}
+			{
+				lblNewLabel = new JLabel("Venta total:");
+				panel.add(lblNewLabel);
+			}
+			{
+				cmbFECHAS = new JComboBox();
+				cmbFECHAS.setModel(new DefaultComboBoxModel(new String[] {"Diaria", "Mensual", "Anual"}));
+				panel.add(cmbFECHAS);
+				cmbFECHAS.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						calcularVentaTotal();
+					}
+				});
+			}
+			{
+				txtresultadoventatotal = new JTextField();
+				txtresultadoventatotal.setEditable(false);
+				txtresultadoventatotal.setText("-Resultado-");
+				panel.add(txtresultadoventatotal);
+				txtresultadoventatotal.setColumns(10);
+			}
 		}
 		{
 			scrollPane = new JScrollPane();
@@ -83,6 +111,7 @@ public class GUITablaDetalleVenta extends JInternalFrame implements ActionListen
 		}
 		cargarDatosEnTabla();
 	}
+	
 
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == btnActualizar) {
@@ -94,6 +123,7 @@ public class GUITablaDetalleVenta extends JInternalFrame implements ActionListen
 		if (e.getSource() == btnEditar) {
 			do_btnEditar_actionPerformed(e);
 		}
+		
 	}
 
 	private void cargarDatosEnTabla() {
@@ -114,6 +144,43 @@ public class GUITablaDetalleVenta extends JInternalFrame implements ActionListen
         }
         table.setModel(modelo);
     }
+	private void calcularVentaTotal() {
+	    String opcion = (String) cmbFECHAS.getSelectedItem();
+	    double total = 0.0;
+
+	    switch (opcion) {
+	        case "Diaria":
+	            total = controlador.obtenerVentaTotalDiaria();
+	            break;
+	        case "Mensual":
+	            String mesStr = JOptionPane.showInputDialog(this, "Ingrese el número de mes (1-12):");
+	            try {
+	                int mes = Integer.parseInt(mesStr);
+	                if (mes >= 1 && mes <= 12) {
+	                    total = controlador.obtenerVentaTotalMensual(mes);
+	                } else {
+	                    JOptionPane.showMessageDialog(this, "Mes inválido.");
+	                    return;
+	                }
+	            } catch (NumberFormatException ex) {
+	                JOptionPane.showMessageDialog(this, "Número inválido.");
+	                return;
+	            }
+	            break;
+	        case "Anual":
+	            String anioStr = JOptionPane.showInputDialog(this, "Ingrese el año (ej. 2025):");
+	            try {
+	                int anio = Integer.parseInt(anioStr);
+	                total = controlador.obtenerVentaTotalAnual(anio);
+	            } catch (NumberFormatException ex) {
+	                JOptionPane.showMessageDialog(this, "Año inválido.");
+	                return;
+	            }
+	            break;
+	    }
+
+	    txtresultadoventatotal.setText(String.format("%.2f", total));
+	}
 	protected void do_btnEditar_actionPerformed(ActionEvent e) {
 		int fila = table.getSelectedRow();
 	    if (fila != -1) {

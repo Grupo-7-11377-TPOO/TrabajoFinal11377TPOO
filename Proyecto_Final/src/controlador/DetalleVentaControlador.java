@@ -228,4 +228,37 @@ public class DetalleVentaControlador {
         }
         return false;
     }
+    public double obtenerVentaTotalDiaria() {
+        String sql = "SELECT SUM(cantidad * precio_unitario) AS total FROM DetalleVenta WHERE DATE(fecha_venta) = CURDATE()";
+        return obtenerTotalDesdeSQL(sql);
+    }
+
+    public double obtenerVentaTotalMensual(int mes) {
+        String sql = "SELECT SUM(cantidad * precio_unitario) AS total FROM DetalleVenta WHERE MONTH(fecha_venta) = ? AND YEAR(fecha_venta) = YEAR(CURDATE())";
+        return obtenerTotalDesdeSQL(sql, mes);
+    }
+
+    public double obtenerVentaTotalAnual(int anio) {
+        String sql = "SELECT SUM(cantidad * precio_unitario) AS total FROM DetalleVenta WHERE YEAR(fecha_venta) = ?";
+        return obtenerTotalDesdeSQL(sql, anio);
+    }
+
+    private double obtenerTotalDesdeSQL(String sql, int... parametro) {
+        try (Connection conn = ConexionBD.getConexion();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            if (parametro.length > 0) {
+                stmt.setInt(1, parametro[0]);
+            }
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getDouble("total");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0.0;
+    }
 }
