@@ -40,6 +40,7 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
     private GUIFormulario formulario;
     private GUITablaProductos tabla;
     private GUIEmpleados empleados;
+    private GUIProgramadores programadores;
     private GUITablaEmpleados tablaEmpleados;
     private GUIDetalleVenta detalleVenta;
     private GUITablaDetalleVenta tablaDetalleVenta;
@@ -50,6 +51,8 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 	private JMenuItem mntmNewMenuItem_5;
 	private JLabel lblNewLabel;
 	private JMenuItem mntmNewMenuItem_6;
+	private JMenu mnNewMenu_2;
+	private JMenuItem mntmNewMenuItem_7;
 
 	/**
 	 * Launch the application.
@@ -137,6 +140,15 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 					mnNewMenu_1.add(mntmNewMenuItem_4);
 				}
 			}
+			{
+				mnNewMenu_2 = new JMenu("Programadores");
+				menuBar.add(mnNewMenu_2);
+				{
+					mntmNewMenuItem_7 = new JMenuItem("Lista");
+					mntmNewMenuItem_7.addActionListener(this);
+					mnNewMenu_2.add(mntmNewMenuItem_7);
+				}
+			}
 		}
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -159,6 +171,9 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 
 
 	public void actionPerformed(ActionEvent e) {
+		if (e.getSource() == mntmNewMenuItem_7) {
+			do_mntmNewMenuItem_7_actionPerformed(e);
+		}
 		if (e.getSource() == mntmNewMenuItem_6) {
 			do_mntmNewMenuItem_6_actionPerformed(e);
 		}
@@ -299,6 +314,21 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 	            detalleCompra.setSelected(true);
 	        } catch (java.beans.PropertyVetoException ex) {
 	            ex.printStackTrace();
+	        }
+	    }
+	}
+	protected void do_mntmNewMenuItem_7_actionPerformed(ActionEvent e) {
+		if (programadores == null || programadores.isClosed()) {
+			cerrarInternalFrames();
+			programadores = new GUIProgramadores();
+	        desktopPane.add(programadores);
+	        centrarInternalFrame(programadores);
+	        programadores.setVisible(true);
+	    } else {
+	        try {
+	            programadores.setSelected(true); // Si ya existe, lo traemos al frente
+	        } catch (java.beans.PropertyVetoException e1) {
+	            e1.printStackTrace();
 	        }
 	    }
 	}
