@@ -4,6 +4,8 @@ import Modelo.DetalleVenta;
 import conexion.ConexionBD;
 
 import java.sql.*;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -241,8 +243,25 @@ public class DetalleVentaControlador {
         return false;
     }
     public double obtenerVentaTotalDiaria() {
-        String sql = "SELECT SUM(cantidad * precio_unitario) AS total FROM DetalleVenta WHERE DATE(fecha_venta) = CURDATE()";
-        return obtenerTotalDesdeSQL(sql);
+        String sql = "SELECT SUM(cantidad * precio_unitario) AS total FROM DetalleVenta WHERE fecha_venta = ?";
+        try (Connection conn = ConexionBD.getConexion();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            // Obtener fecha de hoy en zona horaria de Perú
+            LocalDate hoy = LocalDate.now(ZoneId.of("America/Lima"));
+            java.sql.Date fecha = java.sql.Date.valueOf(hoy);
+
+            stmt.setDate(1, fecha);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getDouble("total");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0.0;
     }
 
     public double obtenerVentaTotalMensual(int mes) {
