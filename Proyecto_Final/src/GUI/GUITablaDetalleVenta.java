@@ -188,27 +188,36 @@ public class GUITablaDetalleVenta extends JInternalFrame implements ActionListen
 	        DetalleVenta detalle = controlador.buscarPorId(id);
 	        if (detalle != null) {
 	            try {
+	                // Solicitar nueva cantidad
 	                String nuevaCantidadStr = JOptionPane.showInputDialog(this, "Nueva cantidad:", detalle.getCantidad());
-	                String nuevoPrecioStr = JOptionPane.showInputDialog(this, "Nuevo precio unitario:", detalle.getPrecioUnitario());
-	                String nuevoIdProductoStr = JOptionPane.showInputDialog(this, "Nuevo ID de Producto:", detalle.getIdProducto());
-	                String nuevoIdEmpleadoStr = JOptionPane.showInputDialog(this, "Nuevo ID de Empleado:", detalle.getIdEmpleado());
-
+	                if (nuevaCantidadStr == null || !nuevaCantidadStr.matches("\\d+")) {
+	                    JOptionPane.showMessageDialog(this, "Cantidad inválida.");
+	                    return;
+	                }
 	                int nuevaCantidad = Integer.parseInt(nuevaCantidadStr);
-	                double nuevoPrecio = Double.parseDouble(nuevoPrecioStr);
-	                int nuevoIdProducto = Integer.parseInt(nuevoIdProductoStr);
-	                int nuevoIdEmpleado = Integer.parseInt(nuevoIdEmpleadoStr);
-
-	                // Validación de cantidad y precio
 	                if (nuevaCantidad <= 0) {
 	                    JOptionPane.showMessageDialog(this, "La cantidad debe ser mayor que cero.");
 	                    return;
 	                }
-	                if (nuevoPrecio <= 0) {
-	                    JOptionPane.showMessageDialog(this, "El precio unitario debe ser mayor que cero.");
-	                    return;
-	                }
 
-	                // Validación de existencia de producto y empleado
+	                // Tabla de productos para seleccionar nuevo producto
+	                JTable tablaProductos = new JTable(controlador.obtenerModeloProductos());
+	                JScrollPane scrollProductos = new JScrollPane(tablaProductos);
+	                scrollProductos.setPreferredSize(new java.awt.Dimension(400, 200));
+	                int seleccionProd = JOptionPane.showConfirmDialog(this, scrollProductos, "Selecciona nuevo producto", JOptionPane.OK_CANCEL_OPTION);
+	                if (seleccionProd != JOptionPane.OK_OPTION || tablaProductos.getSelectedRow() == -1) return;
+	                int nuevoIdProducto = (int) tablaProductos.getValueAt(tablaProductos.getSelectedRow(), 0);
+	                double nuevoPrecio = (double) tablaProductos.getValueAt(tablaProductos.getSelectedRow(), 2); // precio
+
+	                // Tabla de empleados para seleccionar nuevo empleado
+	                JTable tablaEmpleados = new JTable(controlador.obtenerModeloEmpleados());
+	                JScrollPane scrollEmpleados = new JScrollPane(tablaEmpleados);
+	                scrollEmpleados.setPreferredSize(new java.awt.Dimension(400, 200));
+	                int seleccionEmp = JOptionPane.showConfirmDialog(this, scrollEmpleados, "Selecciona nuevo empleado", JOptionPane.OK_CANCEL_OPTION);
+	                if (seleccionEmp != JOptionPane.OK_OPTION || tablaEmpleados.getSelectedRow() == -1) return;
+	                int nuevoIdEmpleado = (int) tablaEmpleados.getValueAt(tablaEmpleados.getSelectedRow(), 0);
+
+	                // Validar existencia (opcional porque los IDs ya vienen de las tablas)
 	                if (!controlador.existeProducto(nuevoIdProducto)) {
 	                    JOptionPane.showMessageDialog(this, "Error: El ID de producto no existe.");
 	                    return;
@@ -218,7 +227,7 @@ public class GUITablaDetalleVenta extends JInternalFrame implements ActionListen
 	                    return;
 	                }
 
-	                // Actualizar detalle
+	                // Actualizar
 	                detalle.setCantidad(nuevaCantidad);
 	                detalle.setPrecioUnitario(nuevoPrecio);
 	                detalle.setIdProducto(nuevoIdProducto);
@@ -229,7 +238,7 @@ public class GUITablaDetalleVenta extends JInternalFrame implements ActionListen
 	                cargarDatosEnTabla();
 
 	            } catch (NumberFormatException ex) {
-	                JOptionPane.showMessageDialog(this, "Ingrese valores válidos para cantidad, precio o IDs.");
+	                JOptionPane.showMessageDialog(this, "Error numérico: " + ex.getMessage());
 	            }
 	        }
 	    } else {

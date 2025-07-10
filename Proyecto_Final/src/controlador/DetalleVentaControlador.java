@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 public class DetalleVentaControlador {
 	
@@ -260,5 +261,47 @@ public class DetalleVentaControlador {
             e.printStackTrace();
         }
         return 0.0;
+    }
+    public DefaultTableModel obtenerModeloEmpleados() {
+        DefaultTableModel modelo = new DefaultTableModel(new String[] { "ID", "Nombre", "Apellido", "Teléfono" }, 0);
+        String sql = "SELECT idEmpleado, nombre, apellido, telefono FROM Empleados";
+
+        try (Connection conn = ConexionBD.getConexion();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+            while (rs.next()) {
+                modelo.addRow(new Object[] {
+                    rs.getInt("idEmpleado"),
+                    rs.getString("nombre"),
+                    rs.getString("apellido"),
+                    rs.getInt("telefono")
+                });
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return modelo;
+    }
+    public DefaultTableModel obtenerModeloProductos() {
+        DefaultTableModel modelo = new DefaultTableModel(new String[] { "ID", "Nombre", "Precio", "Stock" }, 0);
+        String sql = "SELECT idProducto, Nombre, Precio, Stock FROM Productos";
+
+        try (Connection conn = ConexionBD.getConexion();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+            while (rs.next()) {
+                modelo.addRow(new Object[] {
+                    rs.getInt("idProducto"),
+                    rs.getString("Nombre"),
+                    rs.getDouble("Precio"),
+                    rs.getInt("Stock")
+                });
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return modelo;
     }
 }

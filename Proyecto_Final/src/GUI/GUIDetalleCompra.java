@@ -18,17 +18,15 @@ public class GUIDetalleCompra extends JInternalFrame implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
 	private JTable table;
+	private DetalleCompraControlador controlador;
+	private JDesktopPane desktopPane;
+	private final JPanel panel = new JPanel();
 	private JButton btnAgregarCompra;
 	private JButton btnEditarCompra;
 	private JButton btnListaProovedores;
-	private DetalleCompraControlador controlador;
-	private ProductoControlador controlador2;
-	private JScrollPane scrollPane_1;
-	private JTable table_1;
 	private JLabel lblNewLabel;
 	private JComboBox cmbFECHAS;
 	private JTextField txtresultadoCompra;
-	private JDesktopPane desktopPane;
 	/**
 	 * Launch the application.
 	 */
@@ -51,16 +49,21 @@ public class GUIDetalleCompra extends JInternalFrame implements ActionListener {
 	public GUIDetalleCompra() {
 		setTitle("Ventana de reabastecimiento de inventario");
 		this.controlador = new DetalleCompraControlador();
-		this.controlador2 = new ProductoControlador();
-		setBounds(100, 100, 539, 424);
-		getContentPane().setLayout(null);
+		setBounds(100, 100, 539, 430);
+		getContentPane().setLayout(new BorderLayout(0, 0));
 		
-		JPanel panel = new JPanel();
-		panel.setBounds(0, 356, 544, 33);
-		getContentPane().add(panel);
+		JScrollPane scrollPane = new JScrollPane();
+		getContentPane().add(scrollPane, BorderLayout.CENTER);
+		
+		table = new JTable();
+		scrollPane.setViewportView(table);
+		
+		desktopPane = new JDesktopPane();
+		scrollPane.setColumnHeaderView(desktopPane);
 		
 		btnAgregarCompra = new JButton("Añadir");
 		btnAgregarCompra.addActionListener(this);
+		getContentPane().add(panel, BorderLayout.SOUTH);
 		panel.add(btnAgregarCompra);
 		
 		btnEditarCompra = new JButton("Editar");
@@ -70,51 +73,26 @@ public class GUIDetalleCompra extends JInternalFrame implements ActionListener {
 		btnListaProovedores = new JButton("Lista Proovedores");
 		btnListaProovedores.addActionListener(this);
 		panel.add(btnListaProovedores);
-		{
-			lblNewLabel = new JLabel("Total");
-			panel.add(lblNewLabel);
-		}
-		{
-			cmbFECHAS = new JComboBox();
-			cmbFECHAS.setModel(new DefaultComboBoxModel(new String[] {"Mensual:", "Anual:"}));
-			panel.add(cmbFECHAS);
-			cmbFECHAS.addItemListener(new ItemListener() {
-				public void itemStateChanged(ItemEvent e) {
-					if (e.getStateChange() == ItemEvent.SELECTED) {
-						calcularTotalCompra();
+		
+		lblNewLabel = new JLabel("Total");
+		panel.add(lblNewLabel);
+		
+		cmbFECHAS = new JComboBox();
+		cmbFECHAS.setModel(new DefaultComboBoxModel(new String[] {"Mensual:", "Anual:"}));
+		panel.add(cmbFECHAS);
+		cmbFECHAS.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent e) {
+				if (e.getStateChange() == ItemEvent.SELECTED) {
+					calcularTotalCompra();
 					}
 				}
 			});
-		}
-		
-		{
-			txtresultadoCompra = new JTextField();
-			txtresultadoCompra.setText("-Resultado-");
-			txtresultadoCompra.setEditable(false);
-			panel.add(txtresultadoCompra);
-			txtresultadoCompra.setColumns(10);
-		}
-		
-		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(0, 0, 533, 222);
-		getContentPane().add(scrollPane);
-		
-		table = new JTable();
-		scrollPane.setViewportView(table);
-		
-		desktopPane = new JDesktopPane();
-		scrollPane.setColumnHeaderView(desktopPane);
-		{
-			scrollPane_1 = new JScrollPane();
-			scrollPane_1.setBounds(0, 220, 533, 136);
-			getContentPane().add(scrollPane_1);
-			{
-				table_1 = new JTable();
-				scrollPane_1.setViewportView(table_1);
-			}
-		}
+		txtresultadoCompra = new JTextField();
+		txtresultadoCompra.setText("-Resultado-");
+		txtresultadoCompra.setEditable(false);
+		txtresultadoCompra.setColumns(10);
+		panel.add(txtresultadoCompra);
 		cargarTabla();
-		cargarDatosEnTabla();
 	}
 
 	public void actionPerformed(ActionEvent e) {
@@ -147,19 +125,6 @@ public class GUIDetalleCompra extends JInternalFrame implements ActionListener {
 		}
 		table.setModel(modelo);
 	}
-	private void cargarDatosEnTabla() {
-		List<Producto> productos = controlador2.listarProductos();
-
-		String[] columnas = { "ID", "Nombre", "Precio" ,"Stock"};
-		DefaultTableModel modelo = new DefaultTableModel(columnas, 0);
-
-		for (Producto p : productos) {
-			Object[] fila = { p.getCodigo(), p.getNombre(), p.getPrecio(), p.getStock()};
-			modelo.addRow(fila); 
-		}
-
-		table_1.setModel(modelo);
-	}
 	private void calcularTotalCompra() {
 		String opcion = cmbFECHAS.getSelectedItem().toString();
 		double total = 0;
@@ -189,48 +154,64 @@ public class GUIDetalleCompra extends JInternalFrame implements ActionListener {
 			JOptionPane.showMessageDialog(this, "Error al calcular el total: " + ex.getMessage());
 		}
 	}
-
+	private void centrarInternalFrame(JInternalFrame frame) {
+	    int x = (desktopPane.getWidth() - frame.getWidth()) / 2;
+	    int y = (desktopPane.getHeight() - frame.getHeight()) / 2;
+	    frame.setLocation(x, y);
+	}
 	protected void do_btnAgregarCompra_actionPerformed(ActionEvent e) {
 		try {
-			String idProductoStr = JOptionPane.showInputDialog(this, "ID Producto:");
-			String idProovedorStr = JOptionPane.showInputDialog(this, "ID Proovedor:");
-			String cantidadStr = JOptionPane.showInputDialog(this, "Cantidad:");
-			String precioStr = JOptionPane.showInputDialog(this, "Precio de Compra:");
+	        // Tabla de productos
+	        JTable tablaProductos = new JTable(controlador.obtenerModeloProductos());
+	        JScrollPane scrollProd = new JScrollPane(tablaProductos);
+	        scrollProd.setPreferredSize(new Dimension(400, 200));
+	        int opcionProd = JOptionPane.showConfirmDialog(this, scrollProd, "Selecciona un producto", JOptionPane.OK_CANCEL_OPTION);
+	        if (opcionProd != JOptionPane.OK_OPTION || tablaProductos.getSelectedRow() == -1) return;
+	        int idProducto = (int) tablaProductos.getValueAt(tablaProductos.getSelectedRow(), 0);
 
-			if (idProductoStr == null || idProovedorStr == null || cantidadStr == null || precioStr == null) return;
-			// Validación de números enteros positivos
-			if (!idProductoStr.matches("\\d+") || !idProovedorStr.matches("\\d+") || !cantidadStr.matches("\\d+")) {
-				JOptionPane.showMessageDialog(this, "ID Producto, ID Proveedor y Cantidad deben ser números enteros positivos.");
-				return;
-			}
+	        // Tabla de proveedores
+	        JTable tablaProveedores = new JTable(controlador.obtenerModeloProovedores());
+	        JScrollPane scrollProv = new JScrollPane(tablaProveedores);
+	        scrollProv.setPreferredSize(new Dimension(400, 200));
+	        int opcionProv = JOptionPane.showConfirmDialog(this, scrollProv, "Selecciona un proveedor", JOptionPane.OK_CANCEL_OPTION);
+	        if (opcionProv != JOptionPane.OK_OPTION || tablaProveedores.getSelectedRow() == -1) return;
+	        int idProovedor = (int) tablaProveedores.getValueAt(tablaProveedores.getSelectedRow(), 0);
 
-			// Validación de número decimal positivo
-			if (!precioStr.matches("^\\d+(\\.\\d+)?$")) {
-				JOptionPane.showMessageDialog(this, "El precio debe ser un número decimal positivo.");
-				return;
-			}
-			int idProducto = Integer.parseInt(idProductoStr);
-			int idProovedor = Integer.parseInt(idProovedorStr);
-			int cantidad = Integer.parseInt(cantidadStr);
-			double precio = Double.parseDouble(precioStr);
-			
-			if (cantidad <= 0 || precio <= 0) {
-				JOptionPane.showMessageDialog(this, "Cantidad y precio deben ser mayores que cero.");
-				return;
-			}
-			DetalleCompra d = new DetalleCompra();
-			d.setIdProducto(idProducto);
-			d.setIdProovedor(idProovedor);
-			d.setCantidad(cantidad);
-			d.setPrecioCompra(precio);
-			d.setFechaCompra(Date.valueOf(LocalDate.now()));
-			
-			controlador.agregarDetalleCompra(d);
-			cargarDatosEnTabla();
-			cargarTabla();
-		} catch (Exception ex) {
-			JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage());
-		}
+	        // Resto de datos
+	        String cantidadStr = JOptionPane.showInputDialog(this, "Cantidad:");
+	        String precioStr = JOptionPane.showInputDialog(this, "Precio de Compra:");
+
+	        if (cantidadStr == null || precioStr == null) return;
+	        if (!cantidadStr.matches("\\d+")) {
+	            JOptionPane.showMessageDialog(this, "La cantidad debe ser un número entero positivo.");
+	            return;
+	        }
+	        if (!precioStr.matches("^\\d+(\\.\\d+)?$")) {
+	            JOptionPane.showMessageDialog(this, "El precio debe ser un número decimal positivo.");
+	            return;
+	        }
+
+	        int cantidad = Integer.parseInt(cantidadStr);
+	        double precio = Double.parseDouble(precioStr);
+
+	        if (cantidad <= 0 || precio <= 0) {
+	            JOptionPane.showMessageDialog(this, "Cantidad y precio deben ser mayores que cero.");
+	            return;
+	        }
+
+	        // Crear y registrar detalle
+	        DetalleCompra d = new DetalleCompra();
+	        d.setIdProducto(idProducto);
+	        d.setIdProovedor(idProovedor);
+	        d.setCantidad(cantidad);
+	        d.setPrecioCompra(precio);
+	        d.setFechaCompra(Date.valueOf(LocalDate.now()));
+
+	        controlador.agregarDetalleCompra(d);
+	        cargarTabla();
+	    } catch (Exception ex) {
+	        JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage());
+	    }
 	}
 	protected void do_btnEditarCompra_actionPerformed(ActionEvent e) {
 		int fila = table.getSelectedRow();
@@ -280,16 +261,10 @@ public class GUIDetalleCompra extends JInternalFrame implements ActionListener {
 			JOptionPane.showMessageDialog(this, "Seleccione una fila para editar.");
 		}
 	}
-	//Este boton debe redireccionar al GUIProovedor al hacer click
 	protected void do_btnListaProovedores_actionPerformed(ActionEvent e) {
 		GUIProovedores ventana = new GUIProovedores(new controlador.ProovedorControlador());
 		getParent().add(ventana); // asegura que se agrega al mismo desktopPane
 		ventana.setVisible(true);
 		centrarInternalFrame(ventana);
-	}
-	private void centrarInternalFrame(JInternalFrame frame) {
-	    int x = (desktopPane.getWidth() - frame.getWidth()) / 2;
-	    int y = (desktopPane.getHeight() - frame.getHeight()) / 2;
-	    frame.setLocation(x, y);
 	}
 }

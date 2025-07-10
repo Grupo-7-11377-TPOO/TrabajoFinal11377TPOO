@@ -6,6 +6,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 public class DetalleCompraControlador {
 	public List<DetalleCompra> listarDetalleCompras() {
         List<DetalleCompra> lista = new ArrayList<>();
@@ -233,5 +234,47 @@ public class DetalleCompraControlador {
     		e.printStackTrace();
     	}
     	return 0;
+    }
+    public DefaultTableModel obtenerModeloProductos() {
+        DefaultTableModel modelo = new DefaultTableModel(new String[] { "ID", "Nombre", "Precio", "Stock" }, 0);
+        String sql = "SELECT idProducto, Nombre, Precio, Stock FROM Productos";
+
+        try (Connection conn = ConexionBD.getConexion();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+            while (rs.next()) {
+                modelo.addRow(new Object[] {
+                    rs.getInt("idProducto"),
+                    rs.getString("Nombre"),
+                    rs.getDouble("Precio"),
+                    rs.getInt("Stock")
+                });
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return modelo;
+    }
+    public DefaultTableModel obtenerModeloProovedores() {
+        DefaultTableModel modelo = new DefaultTableModel(new String[] { "ID", "Nombre", "RUC", "Teléfono" }, 0);
+        String sql = "SELECT idProovedor, Nombre, RUC, Telefono FROM Proovedor";
+
+        try (Connection conn = ConexionBD.getConexion();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+            while (rs.next()) {
+                modelo.addRow(new Object[] {
+                    rs.getInt("idProovedor"),
+                    rs.getString("Nombre"),
+                    rs.getString("RUC"),
+                    rs.getString("Telefono")
+                });
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return modelo;
     }
 }
