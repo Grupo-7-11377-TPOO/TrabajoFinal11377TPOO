@@ -74,7 +74,18 @@ public class DetalleVentaControlador {
     }
 
     public void eliminarDetalle(int idDetalle) {
-        String sql = "DELETE FROM DetalleVenta WHERE idDetalle = ?";
+    	DetalleVenta detalle = buscarPorId(idDetalle);
+        if (detalle == null) {
+            JOptionPane.showMessageDialog(null, "No se encontró el detalle de venta a eliminar.");
+            return;
+        }
+
+        // Revertir el stock
+        if (!ajustarStock(detalle.getIdProducto(), detalle.getCantidad())) {
+            JOptionPane.showMessageDialog(null, "Error al restaurar stock antes de eliminar.");
+            return;
+        }
+    	String sql = "DELETE FROM DetalleVenta WHERE idDetalle = ?";
 
         try (Connection conn = ConexionBD.getConexion();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
