@@ -2,9 +2,13 @@ package GUI;
 
 import java.awt.EventQueue;
 
+import javax.swing.ImageIcon;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
 import java.awt.Font;
+import java.awt.Image;
+
+import javax.swing.JScrollPane;
 
 public class GUIProgramadores extends JInternalFrame {
 
@@ -17,6 +21,10 @@ public class GUIProgramadores extends JInternalFrame {
 	private JLabel lblN_1;
 	private JLabel lblN_2;
 	private JLabel lblN_4;
+	private JLabel lblNewLabel_4;
+	private JLabel lblNewLabel_5;
+	private JLabel lblNewLabel_6;
+	private JLabel lblAquiIraImagen;
 
 	/**
 	 * Launch the application.
@@ -66,19 +74,19 @@ public class GUIProgramadores extends JInternalFrame {
 			getContentPane().add(lblNewLabel_3);
 		}
 		{
-			lblN = new JLabel("N00");
+			lblN = new JLabel("N00386296");
 			lblN.setFont(new Font("Tahoma", Font.PLAIN, 14));
 			lblN.setBounds(84, 163, 105, 31);
 			getContentPane().add(lblN);
 		}
 		{
-			lblN_1 = new JLabel("N00");
+			lblN_1 = new JLabel("N00381687");
 			lblN_1.setFont(new Font("Tahoma", Font.PLAIN, 14));
-			lblN_1.setBounds(314, 163, 105, 31);
+			lblN_1.setBounds(355, 163, 105, 31);
 			getContentPane().add(lblN_1);
 		}
 		{
-			lblN_2 = new JLabel("N00");
+			lblN_2 = new JLabel("N00388701");
 			lblN_2.setFont(new Font("Tahoma", Font.PLAIN, 14));
 			lblN_2.setBounds(106, 358, 105, 31);
 			getContentPane().add(lblN_2);
@@ -88,6 +96,42 @@ public class GUIProgramadores extends JInternalFrame {
 			lblN_4.setFont(new Font("Tahoma", Font.PLAIN, 14));
 			lblN_4.setBounds(354, 358, 80, 31);
 			getContentPane().add(lblN_4);
+		}
+		{
+			lblNewLabel_4 = new JLabel("Aqui ira imagen");
+			lblNewLabel_4.setBounds(94, 212, 100, 110);
+			getContentPane().add(lblNewLabel_4);
+			ImageIcon icono = new ImageIcon(getClass().getResource("/imagenes/braian.jpg"));
+			Image img = icono.getImage().getScaledInstance(100, 110, Image.SCALE_SMOOTH);
+			lblNewLabel_4.setIcon(new ImageIcon(img));
+			lblNewLabel_4.setText(null); // Quitar el texto "Aquí irá imagen"
+		}
+		{
+			lblNewLabel_5 = new JLabel("Aqui ira imagen1");
+			lblNewLabel_5.setBounds(355, 30, 100, 100);
+			getContentPane().add(lblNewLabel_5);
+			ImageIcon icono = new ImageIcon(getClass().getResource("/imagenes/walter.jpg"));
+			Image img = icono.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH);
+			lblNewLabel_5.setIcon(new ImageIcon(img));
+			lblNewLabel_5.setText(null); // Quitar el texto "Aquí irá imagen"
+		}
+		{
+			lblNewLabel_6 = new JLabel("Aqui ira imagen2");
+			lblNewLabel_6.setBounds(355, 212, 100, 110);
+			getContentPane().add(lblNewLabel_6);
+			ImageIcon icono = new ImageIcon(getClass().getResource("/imagenes/alvaro.png"));
+			Image img = icono.getImage().getScaledInstance(100, 110, Image.SCALE_SMOOTH);
+			lblNewLabel_6.setIcon(new ImageIcon(img));
+			lblNewLabel_6.setText(null); // Quitar el texto "Aquí irá imagen"
+		}
+		{
+			lblAquiIraImagen = new JLabel("Aqui ira imagen3");
+			lblAquiIraImagen.setBounds(94, 30, 100, 100);
+			getContentPane().add(lblAquiIraImagen);
+			ImageIcon icono = new ImageIcon(getClass().getResource("/imagenes/sebas.jpg"));
+			Image img = icono.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH);
+			lblAquiIraImagen.setIcon(new ImageIcon(img));
+			lblAquiIraImagen.setText(null); // Quitar el texto "Aquí irá imagen"
 		}
 
 	}
