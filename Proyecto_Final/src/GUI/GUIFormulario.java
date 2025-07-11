@@ -140,11 +140,19 @@ public class GUIFormulario extends JInternalFrame implements ActionListener {
         int id;
         double precio;
         int stock;
-
+        String nombre = txtNombre.getText().trim();
         try {
             id = Integer.parseInt(txtCodigo.getText().trim());
+            if (id <= 0) {
+                JOptionPane.showMessageDialog(this, "El ID debe ser un número positivo.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
         } catch (NumberFormatException ex) {
             JOptionPane.showMessageDialog(this, "ID debe ser un número entero válido.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        if (!nombre.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+")) {
+            JOptionPane.showMessageDialog(this, "El nombre solo debe contener letras.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
@@ -170,15 +178,11 @@ public class GUIFormulario extends JInternalFrame implements ActionListener {
             return;
         }
 
-        String nombre = txtNombre.getText().trim();
-
         Producto producto = new Producto();
         producto.setCodigo(id);
         producto.setNombre(nombre);
         producto.setPrecio(precio);
         producto.setStock(stock);
-
         controlador.agregarProducto(producto);
-
     }
 }
