@@ -27,7 +27,7 @@ public class ProovedorControlador {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
+ 
         return lista;
     }
 
