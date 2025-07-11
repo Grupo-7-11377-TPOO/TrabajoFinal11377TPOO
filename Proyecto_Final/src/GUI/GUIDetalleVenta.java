@@ -135,6 +135,7 @@ public class GUIDetalleVenta extends JInternalFrame implements ActionListener {
 		}
 		{
 			txtPrecioUnitario = new JTextField();
+			txtPrecioUnitario.setEditable(false);
 			txtPrecioUnitario.setFont(new Font("Tahoma", Font.PLAIN, 14));
 			getContentPane().add(txtPrecioUnitario);
 			txtPrecioUnitario.setColumns(10);

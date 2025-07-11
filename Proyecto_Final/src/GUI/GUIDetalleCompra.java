@@ -265,6 +265,6 @@ public class GUIDetalleCompra extends JInternalFrame implements ActionListener {
 		GUIProovedores ventana = new GUIProovedores(new controlador.ProovedorControlador());
 		getParent().add(ventana); // asegura que se agrega al mismo desktopPane
 		ventana.setVisible(true);
-		centrarInternalFrame(ventana);
+		//centrarInternalFrame(ventana);
 	}
 }

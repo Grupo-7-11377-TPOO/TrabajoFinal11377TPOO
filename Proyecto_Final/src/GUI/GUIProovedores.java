@@ -98,65 +98,99 @@ public class GUIProovedores extends JInternalFrame implements ActionListener {
         table.setModel(modelo);
     }
 	protected void do_btnAgregarProovedor_actionPerformed(ActionEvent e) {
-		try {
-            String idStr = JOptionPane.showInputDialog(this, "Ingrese el ID del proveedor:");
-            String nombre = JOptionPane.showInputDialog(this, "Ingrese el nombre del proveedor:");
-            String telefono = JOptionPane.showInputDialog(this, "Ingrese el teléfono:");
-            String ruc = JOptionPane.showInputDialog(this, "Ingrese el RUC:");
+	    try {
+	        String idStr = JOptionPane.showInputDialog(this, "Ingrese el ID del proveedor:");
+	        String nombre = JOptionPane.showInputDialog(this, "Ingrese el nombre del proveedor:");
+	        String telefono = JOptionPane.showInputDialog(this, "Ingrese el teléfono:");
+	        String ruc = JOptionPane.showInputDialog(this, "Ingrese el RUC:");
 
-            if (idStr == null || nombre == null || telefono == null || ruc == null ||
-                idStr.trim().isEmpty() || nombre.trim().isEmpty() || telefono.trim().isEmpty() || ruc.trim().isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Todos los campos son obligatorios.");
-                return;
-            }
+	        if (idStr == null || nombre == null || telefono == null || ruc == null ||
+	            idStr.trim().isEmpty() || nombre.trim().isEmpty() || telefono.trim().isEmpty() || ruc.trim().isEmpty()) {
+	            JOptionPane.showMessageDialog(this, "Todos los campos son obligatorios.");
+	            return;
+	        }
 
-            int id = Integer.parseInt(idStr);
+	        int id = Integer.parseInt(idStr);
 
-            Proovedor p = new Proovedor();
-            p.setIdProovedor(id);
-            p.setNombre(nombre);
-            p.setTelefono(telefono);
-            p.setRuc(ruc);
+	        // Validar nombre solo con letras y espacios
+	        if (!nombre.matches("^[a-zA-ZáéíóúÁÉÍÓÚñÑ\\s]+$")) {
+	            JOptionPane.showMessageDialog(this, "El nombre solo debe contener letras y espacios.");
+	            return;
+	        }
 
-            controlador.agregarProovedor(p);
-            JOptionPane.showMessageDialog(this, "Proveedor agregado correctamente.");
-            cargarTabla();
-        } catch (NumberFormatException ex) {
-            JOptionPane.showMessageDialog(this, "El ID debe ser un número válido.");
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this, "Error al agregar proveedor: " + ex.getMessage());
-        }
+	        // Validar teléfono y RUC
+	        if (!telefono.matches("\\d{7,9}")) {
+	            JOptionPane.showMessageDialog(this, "El teléfono debe tener entre 7 y 9 dígitos numéricos.");
+	            return;
+	        }
+
+	        if (!ruc.matches("\\d{11}")) {
+	            JOptionPane.showMessageDialog(this, "El RUC debe contener exactamente 11 dígitos numéricos.");
+	            return;
+	        }
+
+	        Proovedor p = new Proovedor();
+	        p.setIdProovedor(id);
+	        p.setNombre(nombre);
+	        p.setTelefono(telefono);
+	        p.setRuc(ruc);
+
+	        controlador.agregarProovedor(p);
+	        JOptionPane.showMessageDialog(this, "Proveedor agregado correctamente.");
+	        cargarTabla();
+	    } catch (NumberFormatException ex) {
+	        JOptionPane.showMessageDialog(this, "El ID debe ser un número válido.");
+	    } catch (Exception ex) {
+	        JOptionPane.showMessageDialog(this, "Error al agregar proveedor: " + ex.getMessage());
+	    }
 	}
 	protected void do_btnEditarProovedor_actionPerformed(ActionEvent e) {
-		int fila = table.getSelectedRow();
-        if (fila != -1) {
-            try {
-                int id = Integer.parseInt(table.getValueAt(fila, 0).toString());
-                String nombre = JOptionPane.showInputDialog(this, "Nuevo nombre:", table.getValueAt(fila, 1));
-                String telefono = JOptionPane.showInputDialog(this, "Nuevo teléfono:", table.getValueAt(fila, 2));
-                String ruc = JOptionPane.showInputDialog(this, "Nuevo RUC:", table.getValueAt(fila, 3));
+	    int fila = table.getSelectedRow();
+	    if (fila != -1) {
+	        try {
+	            int id = Integer.parseInt(table.getValueAt(fila, 0).toString());
+	            String nombre = JOptionPane.showInputDialog(this, "Nuevo nombre:", table.getValueAt(fila, 1));
+	            String telefono = JOptionPane.showInputDialog(this, "Nuevo teléfono:", table.getValueAt(fila, 2));
+	            String ruc = JOptionPane.showInputDialog(this, "Nuevo RUC:", table.getValueAt(fila, 3));
 
-                if (nombre == null || telefono == null || ruc == null ||
-                    nombre.trim().isEmpty() || telefono.trim().isEmpty() || ruc.trim().isEmpty()) {
-                    JOptionPane.showMessageDialog(this, "Todos los campos son obligatorios.");
-                    return;
-                }
+	            if (nombre == null || telefono == null || ruc == null ||
+	                nombre.trim().isEmpty() || telefono.trim().isEmpty() || ruc.trim().isEmpty()) {
+	                JOptionPane.showMessageDialog(this, "Todos los campos son obligatorios.");
+	                return;
+	            }
 
-                Proovedor p = new Proovedor();
-                p.setIdProovedor(id);
-                p.setNombre(nombre);
-                p.setTelefono(telefono);
-                p.setRuc(ruc);
+	            // Validar nombre solo con letras y espacios
+	            if (!nombre.matches("^[a-zA-ZáéíóúÁÉÍÓÚñÑ\\s]+$")) {
+	                JOptionPane.showMessageDialog(this, "El nombre solo debe contener letras y espacios.");
+	                return;
+	            }
 
-                controlador.actualizarProovedor(p);
-                JOptionPane.showMessageDialog(this, "Proveedor actualizado correctamente.");
-                cargarTabla();
-            } catch (Exception ex) {
-                JOptionPane.showMessageDialog(this, "Error al editar proveedor: " + ex.getMessage());
-            }
-        } else {
-            JOptionPane.showMessageDialog(this, "Seleccione un proveedor para editar.");
-        }
+	            // Validar teléfono y RUC
+	            if (!telefono.matches("\\d{7,9}")) {
+	                JOptionPane.showMessageDialog(this, "El teléfono debe tener entre 7 y 9 dígitos numéricos.");
+	                return;
+	            }
+
+	            if (!ruc.matches("\\d{11}")) {
+	                JOptionPane.showMessageDialog(this, "El RUC debe contener exactamente 11 dígitos numéricos.");
+	                return;
+	            }
+
+	            Proovedor p = new Proovedor();
+	            p.setIdProovedor(id);
+	            p.setNombre(nombre);
+	            p.setTelefono(telefono);
+	            p.setRuc(ruc);
+
+	            controlador.actualizarProovedor(p);
+	            JOptionPane.showMessageDialog(this, "Proveedor actualizado correctamente.");
+	            cargarTabla();
+	        } catch (Exception ex) {
+	            JOptionPane.showMessageDialog(this, "Error al editar proveedor: " + ex.getMessage());
+	        }
+	    } else {
+	        JOptionPane.showMessageDialog(this, "Seleccione un proveedor para editar.");
+	    }
 	}
 	protected void do_btnEliminarProovedor_actionPerformed(ActionEvent e) {
 		int fila = table.getSelectedRow();
