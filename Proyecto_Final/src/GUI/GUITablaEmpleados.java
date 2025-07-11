@@ -131,22 +131,44 @@ public class GUITablaEmpleados extends JInternalFrame implements ActionListener 
 	            String nuevoApellido = JOptionPane.showInputDialog(this, "Nuevo apellido:", empleado.getApellido());
 	            String nuevoTelefonoStr = JOptionPane.showInputDialog(this, "Nuevo teléfono:", empleado.getTelefono());
 
+	            if (nuevoNombre == null || nuevoApellido == null || nuevoTelefonoStr == null ||
+	                nuevoNombre.trim().isEmpty() || nuevoApellido.trim().isEmpty() || nuevoTelefonoStr.trim().isEmpty()) {
+	                JOptionPane.showMessageDialog(this, "Todos los campos son obligatorios.");
+	                return;
+	            }
+
+	            if (!nuevoNombre.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+")) {
+	                JOptionPane.showMessageDialog(this, "El nombre solo debe contener letras.");
+	                return;
+	            }
+
+	            if (!nuevoApellido.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+")) {
+	                JOptionPane.showMessageDialog(this, "El apellido solo debe contener letras.");
+	                return;
+	            }
+
+	            if (!nuevoTelefonoStr.matches("\\d{6,15}")) {
+	                JOptionPane.showMessageDialog(this, "El teléfono debe contener solo dígitos (6 a 15 dígitos).");
+	                return;
+	            }
+
 	            try {
 	                int nuevoTelefono = Integer.parseInt(nuevoTelefonoStr);
-	                
-	                empleado.setNombre(nuevoNombre); 
-	                empleado.setApellido(nuevoApellido);
-	                empleado.setTelefono(nuevoTelefono);
 	                if (nuevoTelefono <= 0) {
-	                    JOptionPane.showMessageDialog(this, "El teléfono no debe ser negativo");
+	                    JOptionPane.showMessageDialog(this, "El teléfono debe ser un número positivo.");
 	                    return;
 	                }
 
-	                controlador.actualizarEmpleado(empleado); // ACTUALIZA EN BD
-	                JOptionPane.showMessageDialog(this, "Empleado actualizado.");
+	                empleado.setNombre(nuevoNombre.trim());
+	                empleado.setApellido(nuevoApellido.trim());
+	                empleado.setTelefono(nuevoTelefono);
+
+	                controlador.actualizarEmpleado(empleado);
+	                JOptionPane.showMessageDialog(this, "Empleado actualizado correctamente.");
 	                cargarDatosTabla();
+
 	            } catch (NumberFormatException ex) {
-	                JOptionPane.showMessageDialog(this, "El teléfono debe ser un número entero.");
+	                JOptionPane.showMessageDialog(this, "El teléfono debe ser un número válido.");
 	            }
 	        }
 	    } else {

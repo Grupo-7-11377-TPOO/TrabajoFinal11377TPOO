@@ -124,30 +124,54 @@ public class GUIEmpleados extends JInternalFrame implements ActionListener {
 	}
 	protected void do_btnGuardar_actionPerformed(ActionEvent e) {
 		try {
-			int id = Integer.parseInt(txtIdEmpleado.getText());
-			String nombre = txtNombre.getText().trim();
-			String apellido = txtApellido.getText().trim();
-			int telefono = Integer.parseInt(txtTelefono.getText());
+	        String idStr = txtIdEmpleado.getText().trim();
+	        String nombre = txtNombre.getText().trim();
+	        String apellido = txtApellido.getText().trim();
+	        String telefonoStr = txtTelefono.getText().trim();
 
-			if (nombre.isEmpty() || apellido.isEmpty()) {
-				JOptionPane.showMessageDialog(this, "Nombre y apellido no pueden estar vacíos.");
-				return;
-			}
+	        if (idStr.isEmpty() || nombre.isEmpty() || apellido.isEmpty() || telefonoStr.isEmpty()) {
+	            JOptionPane.showMessageDialog(this, "Todos los campos son obligatorios.");
+	            return;
+	        }
 
-			Empleados emp = new Empleados();
-			emp.setIdEmpleado(id);
-			emp.setNombre(nombre);
-			emp.setApellido(apellido);
-			emp.setTelefono(telefono);
+	        int id = Integer.parseInt(idStr);
+	        if (id <= 0) {
+	            JOptionPane.showMessageDialog(this, "El ID debe ser un número positivo.");
+	            return;
+	        }
 
-			controlador.agregarEmpleado(emp);
-			limpiarCampos();
+	        if (!nombre.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+")) {
+	            JOptionPane.showMessageDialog(this, "El nombre solo debe contener letras.");
+	            return;
+	        }
 
-		} catch (NumberFormatException ex) {
-			JOptionPane.showMessageDialog(this, "Ingrese valores válidos para ID y teléfono.");
-		} catch (Exception ex) {
-			JOptionPane.showMessageDialog(this, "Error al guardar: " + ex.getMessage());
-		}
+	        if (!apellido.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+")) {
+	            JOptionPane.showMessageDialog(this, "El apellido solo debe contener letras.");
+	            return;
+	        }
+
+	        if (!telefonoStr.matches("\\d{6,15}")) {
+	            JOptionPane.showMessageDialog(this, "El teléfono debe contener solo dígitos (entre 6 y 15 dígitos).");
+	            return;
+	        }
+
+	        int telefono = Integer.parseInt(telefonoStr);
+
+	        Empleados emp = new Empleados();
+	        emp.setIdEmpleado(id);
+	        emp.setNombre(nombre);
+	        emp.setApellido(apellido);
+	        emp.setTelefono(telefono);
+
+	        controlador.agregarEmpleado(emp);
+	        JOptionPane.showMessageDialog(this, "Empleado registrado correctamente.");
+	        limpiarCampos();
+
+	    } catch (NumberFormatException ex) {
+	        JOptionPane.showMessageDialog(this, "El ID y teléfono deben ser números válidos.");
+	    } catch (Exception ex) {
+	        JOptionPane.showMessageDialog(this, "Error al guardar: " + ex.getMessage());
+	    }
 	}
 	protected void do_btnCancelar_actionPerformed(ActionEvent e) {
 		dispose();
